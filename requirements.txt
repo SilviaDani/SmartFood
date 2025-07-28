@@ -1,0 +1,21 @@
+accelerate>=0.26.0
+chronos-forecasting
+influxdb-client
+matplotlib
+mockseries #to generate timeseries
+openpyxl
+pandas
+python=3.11
+
+#prometheus_client
+torch
+torchaudio
+torchvision
+
+transformers
+
+------------
+pypots
+#To make grafana run in background
+#nohup ./bin/grafana-server > grafana.log 2>&1 &
+#TO KILL: ps -ef | grep grafana
