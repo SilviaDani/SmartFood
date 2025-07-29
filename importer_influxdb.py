@@ -2,11 +2,11 @@ import pandas as pd
 from influxdb_client import InfluxDBClient
 from datetime import datetime, timezone
 
-def query(query_type, start_time, end_time):
+def query(query_type, start_time, end_time, bucket_name="smart_food_bucket_2023-2024-2025"):
     url = "http://localhost:8086"
     token = "9SUJ_bmJB7eSQz5OWS0nPLClLn2TByE-bnh6hyIjTBbC33mZBvZi51LEPWELdgJpoCXPxKWXs0Bx_CvXQOrSiw=="
     org = "smart_food"
-    bucket_name = "smart_food_bucket_2023-2024-2025"
+    bucket_name = bucket_name
     timeout=1200_000
 
     client = InfluxDBClient(url=url, token=token, org=org, timeout=timeout)
@@ -15,7 +15,7 @@ def query(query_type, start_time, end_time):
     if query_type == "xScuola":
         query = f'from(bucket: "{bucket_name}")\
         |> range(start: time(v: "{start_time}"), stop: time(v: "{end_time}"))\
-        |> filter(fn: (r) => r._measurement == "your_measurement")\
+        |> filter(fn: (r) => r._measurement == "school_food_waste")\
         |> filter(fn: (r) => r._field == "porzspreco" or r._field == "presenze")\
         |> map(fn: (r) => ({{\
             r with\
@@ -36,7 +36,7 @@ def query(query_type, start_time, end_time):
     elif query_type == "xPiattoxScuola":
         query = f'from(bucket: "{bucket_name}")\
         |> range(start: time(v: "{start_time}"), stop: time(v: "{end_time}"))\
-        |> filter(fn: (r) => r._measurement == "your_measurement")\
+        |> filter(fn: (r) => r._measurement == "school_food_waste")\
         |> filter(fn: (r) => r._field == "porzspreco" or r._field == "presenze")\
         |> map(fn: (r) => ({{\
             r with\
@@ -59,7 +59,7 @@ def query(query_type, start_time, end_time):
     elif query_type == "globale":
         query = f'from(bucket: "{bucket_name}")\
         |> range(start: time(v: "{start_time}"), stop: time(v: "{end_time}"))\
-        |> filter(fn: (r) => r._measurement == "your_measurement")\
+        |> filter(fn: (r) => r._measurement == "school_food_waste")\
         |> filter(fn: (r) => r._field == "porzspreco" or r._field == "presenze")\
         |> map(fn: (r) => ({{\
             r with\
@@ -77,7 +77,7 @@ def query(query_type, start_time, end_time):
     elif query_type == "xPiattoGlobale":
         query = f'from(bucket: "{bucket_name}")\
         |> range(start: time(v: "{start_time}"), stop: time(v: "{end_time}"))\
-        |> filter(fn: (r) => r._measurement == "your_measurement")\
+        |> filter(fn: (r) => r._measurement == "school_food_waste")\
         |> filter(fn: (r) => r._field == "porzspreco" or r._field == "presenze")\
         |> map(fn: (r) => ({{\
             r with\
@@ -99,7 +99,7 @@ def query(query_type, start_time, end_time):
     elif query_type == "xMacrocategoriaGlobale":
         query = f'from(bucket: "{bucket_name}")\
         |> range(start: time(v: "{start_time}"), stop: time(v: "{end_time}"))\
-        |> filter(fn: (r) => r._measurement == "your_measurement")\
+        |> filter(fn: (r) => r._measurement == "school_food_waste")\
         |> filter(fn: (r) => r._field == "porzspreco" or r._field == "presenze")\
         |> map(fn: (r) => ({{\
             r with\
@@ -122,7 +122,7 @@ def query(query_type, start_time, end_time):
     elif query_type == "xMacrocategoriaxScuola":
         query = f'from(bucket: "{bucket_name}")\
         |> range(start: time(v: "{start_time}"), stop: time(v: "{end_time}"))\
-        |> filter(fn: (r) => r._measurement == "your_measurement")\
+        |> filter(fn: (r) => r._measurement == "school_food_waste")\
         |> filter(fn: (r) => r._field == "porzspreco" or r._field == "presenze")\
         |> map(fn: (r) => ({{\
             r with\

@@ -421,7 +421,8 @@ if __name__ == "__main__":
         "--end_date", type=lambda s: s + "T00:00:00Z",
         help="End time for the InfluxDB query (YYYY-MM-DD). Auto-appends T00:00:00Z. If omitted, uses today UTC."
     )
-    parser.add_argument("--imputation", action="store_true")
+    parser.add_argument("--bucket_name", type=str, default="smart_food_bucket_2023-2024-2025", 
+                        help="InfluxDB bucket name to query from, if you want to use the one with imputation -> smart_food_bucket_imputed_2023-2024-202")
     args = parser.parse_args()
 
     set_random_seed(17)
@@ -430,7 +431,7 @@ if __name__ == "__main__":
         args.end_date = datetime.now(timezone.utc).strftime("%Y-%m-%d") + "T00:00:00Z"
 
     # Load and preprocess data
-    df = query(args.query_type, args.start_date, args.end_date)
+    df = query(args.query_type, args.start_date, args.end_date, args.bucket_name)
     
     # Remove rows where macrocategoria is NaN or lowercase
     if 'macrocategoria' in df.columns:
@@ -444,71 +445,38 @@ if __name__ == "__main__":
     print("Original df data last 10 dates:")
     print(df[df['datetime'].dt.normalize() >= '2025-04-01'])
     df["datetime"] = pd.to_datetime(df["datetime"]).dt.tz_localize(None)
-    if args.imputation:
-        df_completed = complete_time_series(df, args.query_type)
-        num_rows_before = len(df)
-        num_rows_after = len(df_completed)
-        rows_added = num_rows_after - num_rows_before
-        print(f"📊 Imputation check: added {rows_added} rows via completion")
+    
 
-        if rows_added == 0:
-            print("⚠️ No rows added — skipping imputation")
-            df_completed = df.copy()  # fallback to original
-            args.imputation = False
-    if args.imputation:
-        # Prepare data for imputation
-        data_with_nans = prepare_data_for_imputation(df_completed, args.query_type)
-        n_series, n_steps, n_features = data_with_nans.shape
-        
-        # Run imputation
-        imputed_data = run_imputation(data_with_nans, n_steps, n_features)
-        
-        # Convert back to DataFrame format
-        imputed_flat = imputed_data.squeeze(-1).T  # Transpose back to (n_steps, n_series)
-        # Step 1: Make sure dates are sorted and aligned with imputed data
-        dates = sorted(df_completed['date'].unique())
-        item_ids = sorted(df_completed['item_id'].unique())
-
-        # Step 2: Build pivot_df_imputed with named index
-        pivot_df_imputed = pd.DataFrame(
-            imputed_flat,
-            index=pd.Index(dates, name='date'),  # <- Explicitly name the index
-            columns=item_ids
-        )
-
-        # Step 3: Reshape back to long format
-        df_completed = pivot_df_imputed.reset_index().melt(id_vars='date', var_name='item_id', value_name='target')
+    # Ensure we keep all columns and create date properly
+    if 'datetime' in df.columns:
+        df['date'] = pd.to_datetime(df['datetime']).dt.tz_localize(None).dt.normalize()
+    df_completed = df.copy()  # Keep all columns
+    
+    # Ensure we have a target column
+    if 'value' in df_completed.columns:
+        df_completed.rename(columns={'value': 'target'}, inplace=True)
+    elif '_value' in df_completed.columns:
+        df_completed.rename(columns={'_value': 'target'}, inplace=True)
     else:
-        # Ensure we keep all columns and create date properly
-        if 'datetime' in df.columns:
-            df['date'] = pd.to_datetime(df['datetime']).dt.tz_localize(None).dt.normalize()
-        df_completed = df.copy()  # Keep all columns
-        
-        # Ensure we have a target column
-        if 'value' in df_completed.columns:
-            df_completed.rename(columns={'value': 'target'}, inplace=True)
-        elif '_value' in df_completed.columns:
-            df_completed.rename(columns={'_value': 'target'}, inplace=True)
-        else:
-            # Find first numeric column to use as target
-            numeric_cols = df_completed.select_dtypes(include=[np.number]).columns
-            df_completed.rename(columns={numeric_cols[0]: 'target'}, inplace=True)
+        # Find first numeric column to use as target
+        numeric_cols = df_completed.select_dtypes(include=[np.number]).columns
+        df_completed.rename(columns={numeric_cols[0]: 'target'}, inplace=True)
 
-        # Set item_id for grouping
-        if args.query_type == "globale":
-            df_completed["item_id"] = "globale"
-        elif args.query_type == "xPiattoxScuola":
-            df_completed["item_id"] = df_completed["scuola"].fillna('') + "_" + df_completed["gruppopiatto"].fillna('')
-        elif args.query_type == "xMacrocategoriaxScuola":
-            df_completed["item_id"] = df_completed["scuola"].fillna('') + "_" + df_completed["macrocategoria"].fillna('')
-        elif args.query_type == "xScuola":
-            df_completed["item_id"] = df_completed["scuola"].fillna('')
-        elif args.query_type == "xPiattoGlobale":
-            df_completed["item_id"] = df_completed["gruppopiatto"].fillna('')
-        elif args.query_type == "xMacrocategoriaGlobale":
-            df_completed["item_id"] = df_completed["macrocategoria"].fillna('')
-        else:
-            df_completed["item_id"] = "unknown"
+    # Set item_id for grouping
+    if args.query_type == "globale":
+        df_completed["item_id"] = "globale"
+    elif args.query_type == "xPiattoxScuola":
+        df_completed["item_id"] = df_completed["scuola"].fillna('') + "_" + df_completed["gruppopiatto"].fillna('')
+    elif args.query_type == "xMacrocategoriaxScuola":
+        df_completed["item_id"] = df_completed["scuola"].fillna('') + "_" + df_completed["macrocategoria"].fillna('')
+    elif args.query_type == "xScuola":
+        df_completed["item_id"] = df_completed["scuola"].fillna('')
+    elif args.query_type == "xPiattoGlobale":
+        df_completed["item_id"] = df_completed["gruppopiatto"].fillna('')
+    elif args.query_type == "xMacrocategoriaGlobale":
+        df_completed["item_id"] = df_completed["macrocategoria"].fillna('')
+    else:
+        df_completed["item_id"] = "unknown"
 
     print("Completed df shape:", df_completed.shape)
 
