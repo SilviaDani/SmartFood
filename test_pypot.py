@@ -413,7 +413,16 @@ def filter_short_series(df, id_col, time_col, min_length):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--prediction_length", required=True, type=int)
-    parser.add_argument("--query_type", required=True, type=str)
+    parser.add_argument("--query_type", required=True, type=str,
+                        help=(
+            "Which grouping to forecast:\n"
+            "  • xPiattoxScuola: per-school × per-dish-type\n"
+            "  • xScuola: per-school only\n"
+            "  • globale: single global series\n"
+            "  • xPiattoGlobale: per-dish-type across all schools\n"
+            "  • xMacrocategoriaGlobale: per-dish-macrocategory\n"
+            "  • xMacrocategoriaxScuola: per-school × per-dish-macrocategory"
+        ))
     parser.add_argument("--plot", action="store_true")
     parser.add_argument("--output_dir", type=str, default="plots")
     parser.add_argument("--start_date", type=str, default="2023-01-01")
@@ -422,7 +431,7 @@ if __name__ == "__main__":
         help="End time for the InfluxDB query (YYYY-MM-DD). Auto-appends T00:00:00Z. If omitted, uses today UTC."
     )
     parser.add_argument("--bucket_name", type=str, default="smart_food_bucket_2023-2024-2025", 
-                        help="InfluxDB bucket name to query from, if you want to use the one with imputation -> smart_food_bucket_imputed_2023-2024-202")
+                        help="InfluxDB bucket name to query from, if you want to use the one with imputation -> smart_food_bucket_imputed_2023-2024-2025")
     args = parser.parse_args()
 
     set_random_seed(17)
