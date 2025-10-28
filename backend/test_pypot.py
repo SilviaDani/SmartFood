@@ -410,6 +410,10 @@ def filter_short_series(df, id_col, time_col, min_length):
     counts = df.groupby(id_col)[time_col].count()
     return df[df[id_col].isin(counts[counts > min_length].index)]
 
+
+
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--prediction_length", required=True, type=int)

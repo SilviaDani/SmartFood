@@ -5,7 +5,7 @@ matplotlib
 mockseries #to generate timeseries
 openpyxl
 pandas
-python=3.11
+# python=3.11
 
 #prometheus_client
 torch
@@ -14,7 +14,7 @@ torchvision
 
 transformers
 
-------------
+#------------
 pypots
 #To make grafana run in background
 #nohup ./bin/grafana-server > grafana.log 2>&1 &

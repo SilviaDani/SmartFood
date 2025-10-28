@@ -38,3 +38,18 @@ Available types of analysis:
 - **Grafana** – Dashboards & visualizations
 - **Amazon Chronos** – Forecasting (fine-tuned)
 - **Pypots** – Forecasting & imputation (TimeMixer, SAITS)
+
+## Docker
+To build the image:
+- docker-compose build
+- docker-compose up -d
+
+To delete the image and rebuild it from scratch:
+- docker-compose down -v
+- docker-compose build --no-cache
+- docker-compose up
+
+Turn Docker off:
+- docker-compose down
+
+

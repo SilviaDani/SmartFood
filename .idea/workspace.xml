@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d1a90e8c-fe93-4e1d-8810-0ccca6623707" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chatbot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/create_timeseries.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/create_timeseries.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter_influxdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/exporter_influxdb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/exporter_influxdb_missValues.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/exporter_influxdb_missValues.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/finetune.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/finetune.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/importer_influxdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/importer_influxdb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/match_format.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/match_format.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/merge_files.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/merge_files.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/notes.md" beforeDir="false" afterPath="$PROJECT_DIR$/backend/notes.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_chronos.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test_chronos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_pypot.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test_pypot.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="Dockerfile" />
+      </list>
+    </option>
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform)); sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo, NoAppException&#10;for module in [&quot;main.py&quot;, &quot;wsgi.py&quot;, &quot;app.py&quot;]:&#10;    try: locals().update(ScriptInfo(app_import_path=module, create_app=None).load_app().make_shell_context()); print(&quot;\nFlask App: %s&quot; % app.import_name); break&#10;    except NoAppException: pass" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Arkiserat&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/SilviaDani/SmartFood.git&quot;,
+    &quot;accountId&quot;: &quot;7b20a38f-976c-47a9-92c9-adc2e00c04fa&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="30dmmHqtS7rdG4g0YQKqPEq2C9u" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.pyPOTS_forecast.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/arne9/Documents/GitHub/SmartFood&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Runtime.Targets.Configurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\arne9\Documents\GitHub\SmartFood\frontend" />
+      <recent name="C:\Users\arne9\Documents\GitHub\SmartFood\src" />
+      <recent name="C:\Users\arne9\Documents\GitHub\SmartFood" />
+      <recent name="C:\Users\arne9\Documents\GitHub\SmartFood\backend" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="docker-deploy" factoryName="dockerfile" temporary="true">
+      <deployment type="dockerfile">
+        <settings />
+      </deployment>
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-PY-252.23892.515" />
+        <option value="bundled-python-sdk-7e47963ff851-f0eec537fc84-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.23892.515" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d1a90e8c-fe93-4e1d-8810-0ccca6623707" name="Changes" comment="" />
+      <created>1753965986910</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1753965986910</updated>
+      <workItem from="1753966000455" duration="1990000" />
+      <workItem from="1754647288698" duration="1114000" />
+      <workItem from="1754768198802" duration="3325000" />
+      <workItem from="1754929951399" duration="2104000" />
+      <workItem from="1755103852164" duration="3620000" />
+      <workItem from="1755162861769" duration="2649000" />
+      <workItem from="1755252063839" duration="1045000" />
+      <workItem from="1755253737684" duration="1104000" />
+      <workItem from="1755275217837" duration="797000" />
+      <workItem from="1755427511653" duration="960000" />
+      <workItem from="1755523483561" duration="4766000" />
+      <workItem from="1755529183512" duration="1156000" />
+      <workItem from="1755531768177" duration="2035000" />
+      <workItem from="1755852437503" duration="5237000" />
+      <workItem from="1756195365818" duration="5567000" />
+      <workItem from="1756390294707" duration="27000" />
+      <workItem from="1756405525412" duration="1470000" />
+      <workItem from="1756455798420" duration="1105000" />
+      <workItem from="1756461760011" duration="10549000" />
+      <workItem from="1757164926753" duration="5919000" />
+      <workItem from="1757624470692" duration="19000" />
+      <workItem from="1757949960551" duration="1866000" />
+      <workItem from="1758007413507" duration="4584000" />
+      <workItem from="1759506478299" duration="498000" />
+      <workItem from="1759507060814" duration="2724000" />
+      <workItem from="1759680116000" duration="3206000" />
+      <workItem from="1759754441302" duration="281000" />
+      <workItem from="1760632854264" duration="490000" />
+      <workItem from="1760633487457" duration="4516000" />
+      <workItem from="1760959403609" duration="76000" />
+      <workItem from="1761650287486" duration="1243000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/backend/importer_influxdb.py</url>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/SmartFood$pyPOTS_forecast.coverage" NAME="pyPOTS_forecast Coverage Results" MODIFIED="1758012123792" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>

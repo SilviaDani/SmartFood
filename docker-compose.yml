@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: smartfood_backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - INFLUXDB_URL=http://localhost:8086
+      - INFLUXDB_TOKEN=9SUJ_bmJB7eSQz5OWS0nPLClLn2TByE-bnh6hyIjTBbC33mZBvZi51LEPWELdgJpoCXPxKWXs0Bx_CvXQOrSiw==
+      - INFLUXDB_ORG=smart_food
+      - INFLUXDB_BUCKET=smart_food_bucket_2023-2024-2025
+      - DJANGO_SETTINGS_MODULE=smartfood.settings
+    depends_on:
+      - influxdb
+
+
+  frontend:
+    build: ./frontend
+    container_name: smartfood_frontend
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=adminpassword
+      - DOCKER_INFLUXDB_INIT_ORG=smart_food
+      - DOCKER_INFLUXDB_INIT_BUCKET=smart_food_bucket_2023-2024-2025
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=9SUJ_bmJB7eSQz5OWS0nPLClLn2TByE-bnh6hyIjTBbC33mZBvZi51LEPWELdgJpoCXPxKWXs0Bx_CvXQOrSiw==
+      - REACT_APP_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+
+volumes:
+  influxdb_data:
