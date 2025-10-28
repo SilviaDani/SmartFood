@@ -5,19 +5,62 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d1a90e8c-fe93-4e1d-8810-0ccca6623707" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/chatbot.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/create_timeseries.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/create_timeseries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter_influxdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/exporter_influxdb.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/exporter_influxdb_missValues.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/exporter_influxdb_missValues.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/finetune.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/finetune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/importer_influxdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/importer_influxdb.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/match_format.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/match_format.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/merge_files.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/merge_files.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/notes.md" beforeDir="false" afterPath="$PROJECT_DIR$/backend/notes.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_chronos.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test_chronos.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test_pypot.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/test_pypot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/chatbot.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/chatbot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/create_timeseries.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/create_timeseries.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/exporter_influxdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/exporter_influxdb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/exporter_influxdb_missValues.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/exporter_influxdb_missValues.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/finetune.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/finetune.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/importer_influxdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/importer_influxdb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/match_format.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/match_format.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/merge_files.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/merge_files.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/test_chronos.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/test_chronos.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/test_pypot.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/smartfood/test_pypot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/DataEntryForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/DataEntryForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/accordion.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/accordion.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/alert-dialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/alert-dialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/alert.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/alert.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/aspect-ratio.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/aspect-ratio.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/avatar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/avatar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/badge.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/badge.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/breadcrumb.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/breadcrumb.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/calendar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/calendar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/carousel.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/carousel.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/chart.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/chart.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/checkbox.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/checkbox.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/collapsible.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/collapsible.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/command.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/command.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/context-menu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/context-menu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/dialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/dialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/drawer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/drawer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/dropdown-menu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/dropdown-menu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/hover-card.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/hover-card.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/label.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/label.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/menubar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/menubar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/navigation-menu.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/navigation-menu.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/pagination.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/pagination.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/popover.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/popover.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/progress.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/progress.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/radio-group.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/radio-group.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/resizable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/resizable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/scroll-area.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/scroll-area.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/select.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/select.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/separator.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/separator.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/sheet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/sheet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/sidebar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/sidebar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/skeleton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/skeleton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/slider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/slider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/sonner.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/sonner.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/switch.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/switch.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/tabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/tabs.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/toggle-group.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/toggle-group.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/toggle.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/toggle.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/components/ui/tooltip.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/components/ui/tooltip.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,29 +109,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.pyPOTS_forecast.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/arne9/Documents/GitHub/SmartFood&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;Runtime.Targets.Configurable&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.pyPOTS_forecast.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/arne9/Documents/GitHub/SmartFood",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "Runtime.Targets.Configurable",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\PyCharm 2024.3.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\arne9\Documents\GitHub\SmartFood\frontend" />
+      <recent name="C:\Users\arne9\Documents\GitHub\SmartFood\backend\smartfood" />
       <recent name="C:\Users\arne9\Documents\GitHub\SmartFood\src" />
       <recent name="C:\Users\arne9\Documents\GitHub\SmartFood" />
       <recent name="C:\Users\arne9\Documents\GitHub\SmartFood\backend" />
@@ -148,7 +193,8 @@
       <workItem from="1760632854264" duration="490000" />
       <workItem from="1760633487457" duration="4516000" />
       <workItem from="1760959403609" duration="76000" />
-      <workItem from="1761650287486" duration="1243000" />
+      <workItem from="1761650287486" duration="3569000" />
+      <workItem from="1761654792703" duration="5519000" />
     </task>
     <servers />
   </component>
@@ -159,8 +205,18 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/backend/importer_influxdb.py</url>
+          <url>file://$PROJECT_DIR$/backend/smartfood/importer_influxdb.py</url>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/frontend/components/ui/alert.tsx</url>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/frontend/components/ui/badge.tsx</url>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
