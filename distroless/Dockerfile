@@ -1,4 +1,4 @@
-# Backend Dockerfile - Multi-stage build per distroless
+# Distroless Backend Dockerfile - Multi-stage build
 
 # Stage 1: Builder
 FROM python:3.11-slim AS builder
@@ -9,29 +9,25 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y libpq-dev gcc && pip install --upgrade pip
 
 # Copy requirements
-COPY backend/requirements.txt .
+COPY ../backend/requirements.txt .
 
 # Install Python dependencies in a virtual environment
 RUN pip install --user -r requirements.txt
 
-# Stage 2: Runtime (slim - molto leggero comunque)
-FROM python:3.11-slim
+# Stage 2: Runtime distroless
+FROM gcr.io/distroless/python3-nonroot:latest
 
 WORKDIR /app
 
 # Copy Python packages from builder
-COPY --from=builder /root/.local /root/.local
+COPY --from=builder /root/.local /home/nonroot/.local
 
 # Copy application code
-COPY backend/ .
+COPY ../backend/ .
 
 # Set PATH to use user packages
-ENV PATH=/root/.local/bin:$PATH
+ENV PATH=/home/nonroot/.local/bin:$PATH
 ENV PYTHONUNBUFFERED=1
-
-# Create non-root user per sicurezza
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
-USER appuser
 
 # Expose port
 EXPOSE 8000

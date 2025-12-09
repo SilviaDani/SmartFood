@@ -52,4 +52,31 @@ To delete the image and rebuild it from scratch:
 Turn Docker off:
 - docker-compose down
 
+## Distroless Docker
+
+  # Backend
+  docker build -f backend/Dockerfile -t smartfood-backend:distroless .
+
+  # Frontend
+  docker build -f frontend/Dockerfile -t smartfood-frontend:distroless .
+
+  # Confronta le dimensioni
+  docker images | grep smartfood
+
+## CSV Upload Feature
+
+The application now supports bulk CSV data import. See [CSV_UPLOAD_GUIDE.md](./CSV_UPLOAD_GUIDE.md) for:
+- Expected CSV format
+- How to upload files from the frontend
+- Backend validation and storage
+- Integration with InfluxDB
+
+Quick start:
+```bash
+# 1. Use the example file
+python test_csv_upload.py example_data.csv
+
+# 2. Or upload through the UI: Data Entry → Bulk Upload CSV Data
+```
+
 

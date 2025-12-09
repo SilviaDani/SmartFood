@@ -1,0 +1,16 @@
+school,date,dish_name,portions_prepared,portions_wasted
+Lincoln Elementary,2024-11-10,Spaghetti with Marinara,120,15
+Lincoln Elementary,2024-11-10,Green Salad,120,8
+Lincoln Elementary,2024-11-11,Chicken Parm,110,12
+Washington Middle School,2024-11-10,Pasta Primavera,100,8
+Washington Middle School,2024-11-10,Steamed Vegetables,100,5
+Washington Middle School,2024-11-11,Beef Stroganoff,95,18
+Roosevelt High School,2024-11-10,Pizza Margherita,80,5
+Roosevelt High School,2024-11-10,Mixed Salad,80,3
+Roosevelt High School,2024-11-11,Fish Tacos,75,7
+Jefferson Primary School,2024-11-10,Mac and Cheese,90,12
+Jefferson Primary School,2024-11-10,Broccoli,90,20
+Jefferson Primary School,2024-11-11,Turkey Meatballs,85,8
+Kennedy Secondary School,2024-11-10,Rice Bowl,110,9
+Kennedy Secondary School,2024-11-10,Stir-fry Vegetables,110,6
+Kennedy Secondary School,2024-11-11,Salmon Fillet,100,4

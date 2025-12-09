@@ -6,9 +6,12 @@ import { Label } from './ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Calendar } from './ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { CalendarIcon, ArrowLeft, Save, AlertCircle } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import { CalendarIcon, ArrowLeft, Save, AlertCircle, Upload } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { CSVUploader } from './CSVUploader';
+import { DISH_CATEGORIES } from '../lib/dishCategories';
 
 interface DataEntryFormProps {
   onBack: () => void;
@@ -26,6 +29,7 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
   const [formData, setFormData] = useState({
     school: '',
     date: new Date(),
+    category: '',
     dishName: '',
     portionsPrepared: '',
     portionsWasted: ''
@@ -37,7 +41,7 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
     e.preventDefault();
     
     // Validation
-    if (!formData.school || !formData.dishName || !formData.portionsPrepared) {
+    if (!formData.school || !formData.category || !formData.dishName || !formData.portionsPrepared) {
       toast.error('Please fill in all required fields');
       return;
     }
@@ -72,6 +76,7 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
       setFormData({
         school: '',
         date: new Date(),
+        category: '',
         dishName: '',
         portionsPrepared: '',
         portionsWasted: ''
@@ -89,7 +94,7 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <Button onClick={onBack} variant="ghost" className="mb-4">
@@ -100,12 +105,27 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
           <p className="text-gray-600 mt-2">Record information about prepared meals and food waste</p>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Meal Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Tabs Container */}
+        <Tabs defaultValue="single" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="single" className="flex items-center gap-2">
+              <Save className="w-4 h-4" />
+              Single Entry
+            </TabsTrigger>
+            <TabsTrigger value="csv" className="flex items-center gap-2">
+              <Upload className="w-4 h-4" />
+              Bulk Upload
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Tab 1: Single Entry */}
+          <TabsContent value="single" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Meal Information</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
               {/* School Selection */}
               <div className="space-y-2">
                 <Label htmlFor="school">School *</Label>
@@ -149,7 +169,22 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
                 </Popover>
               </div>
 
-              {/* Dish Name */}
+              {/* Dish Category */}
+              <div className="space-y-2">
+                <Label htmlFor="category">Dish Category *</Label>
+                <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a category..." />
+                  </SelectTrigger>
+                  <SelectContent style={{ backgroundColor: '#e5e7eb', color: '#1f2937' }}>
+                    {DISH_CATEGORIES.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        {cat.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="dishName">Dish Name *</Label>
                 <Input
@@ -238,13 +273,26 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
               </div>
             </form>
           </CardContent>
-        </Card>
+            </Card>
 
-        {/* Help Text */}
-        <div className="mt-8 text-center text-sm text-gray-600">
-          <p>Make sure to enter accurate data to help improve prediction models.</p>
-          <p>All fields marked with * are required.</p>
-        </div>
+            {/* Help Text */}
+            <div className="text-center text-sm text-gray-600">
+              <p>Make sure to enter accurate data to help improve prediction models.</p>
+              <p>All fields marked with * are required.</p>
+            </div>
+          </TabsContent>
+
+          {/* Tab 2: Bulk Upload */}
+          <TabsContent value="csv" className="space-y-6">
+            <CSVUploader />
+
+            {/* Help Text */}
+            <div className="text-center text-sm text-gray-600">
+              <p>Upload multiple entries at once using a CSV file.</p>
+              <p>This is the fastest way to import large amounts of data.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

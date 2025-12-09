@@ -4,7 +4,7 @@ influxdb-client
 matplotlib
 mockseries #to generate timeseries
 openpyxl
-pandas
+pandas>=2.0.3
 # python=3.11
 
 #prometheus_client
@@ -19,3 +19,10 @@ pypots
 #To make grafana run in background
 #nohup ./bin/grafana-server > grafana.log 2>&1 &
 #TO KILL: ps -ef | grep grafana
+
+# CSV Upload Feature
+flask>=2.3.0
+flask-cors>=4.0.0
+werkzeug>=2.3.0
+requests>=2.31.0
+python-dateutil>=2.8.0

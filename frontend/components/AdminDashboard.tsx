@@ -6,6 +6,7 @@ import { Progress } from './ui/progress';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Brain, Database, Play, Square, BarChart3, Calendar, Users, Shield } from 'lucide-react';
+import { AITraining } from './AITraining';
 
 interface AdminDashboardProps {
   onLogout: () => void;
@@ -166,59 +167,7 @@ export function AdminDashboard({ onLogout, username }: AdminDashboardProps) {
           </TabsContent>
 
           <TabsContent value="training" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="w-5 h-5" />
-                  AI Model Training
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center gap-4">
-                  {!isTraining ? (
-                    <Button onClick={startTraining} className="flex items-center gap-2">
-                      <Play className="w-4 h-4" />
-                      Start Training
-                    </Button>
-                  ) : (
-                    <Button onClick={stopTraining} variant="destructive" className="flex items-center gap-2">
-                      <Square className="w-4 h-4" />
-                      Stop Training
-                    </Button>
-                  )}
-                  
-                  {isTraining && (
-                    <Badge variant="secondary" className="animate-pulse">
-                      Training in progress...
-                    </Badge>
-                  )}
-                </div>
-
-                {isTraining && (
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Training Progress</span>
-                      <span>{Math.round(trainingProgress)}%</span>
-                    </div>
-                    <Progress value={trainingProgress} className="w-full" />
-                  </div>
-                )}
-
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="text-sm mb-2">Training Configuration</h4>
-                  <div className="grid grid-cols-2 gap-4 text-xs text-gray-600">
-                    <div>
-                      <p><strong>Data Range:</strong> Last 6 months</p>
-                      <p><strong>Algorithm:</strong> Random Forest</p>
-                    </div>
-                    <div>
-                      <p><strong>Features:</strong> 15 variables</p>
-                      <p><strong>Validation:</strong> 80/20 split</p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <AITraining />
           </TabsContent>
 
           <TabsContent value="data" className="space-y-6">
