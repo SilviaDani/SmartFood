@@ -206,7 +206,7 @@ export function DateRangeCalendar({
           }}
           className="flex-1 h-8 text-xs"
         >
-          Reset
+          Ripristina
         </Button>
       </div>
     </div>

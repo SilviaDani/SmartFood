@@ -26,8 +26,8 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl text-gray-900">School Menu System</h1>
-          <p className="mt-2 text-gray-600">Sign in to your account</p>
+          <h1 className="text-3xl text-gray-900">Aiuto decisionale per Menù scolastico</h1>
+          <p className="mt-2 text-gray-600">Accedi al tuo account</p>
         </div>
 
         <Card>
@@ -37,7 +37,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="role">Account Type</Label>
+                <Label htmlFor="role">Tipo di accesso</Label>
                 <Select value={role} onValueChange={(value: 'admin' | 'user') => setRole(value)}>
                   <SelectTrigger>
                     <SelectValue />
@@ -46,13 +46,13 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                     <SelectItem value="user">
                       <div className="flex items-center gap-2">
                         <UserCircle className="w-4 h-4" />
-                        <span>User</span>
+                        <span>Utente</span>
                       </div>
                     </SelectItem>
                     <SelectItem value="admin">
                       <div className="flex items-center gap-2">
                         <Shield className="w-4 h-4" />
-                        <span>Administrator</span>
+                        <span>Amministratore</span>
                       </div>
                     </SelectItem>
                   </SelectContent>
@@ -60,13 +60,13 @@ export function LoginPage({ onLogin }: LoginPageProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
+                <Label htmlFor="username">Nome utente</Label>
                 <Input
                   id="username"
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your username"
+                  placeholder="Inserisci il tuo nome utente"
                   required
                 />
               </div>
@@ -78,22 +78,22 @@ export function LoginPage({ onLogin }: LoginPageProps) {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder="Inserisci la tua password"
                   required
                 />
               </div>
 
               <Button type="submit" className="w-full">
-                Sign In
+                Accedi
               </Button>
             </form>
 
             <div className="mt-6 pt-6 border-t border-gray-200">
               <div className="text-sm text-gray-600">
-                <p className="mb-2">Demo Credentials:</p>
+                <p className="mb-2">Credenziali Demo:</p>
                 <div className="space-y-1">
-                  <p><strong>User:</strong> demo / password</p>
-                  <p><strong>Admin:</strong> admin / password</p>
+                  <p><strong>Utente:</strong> demo / password</p>
+                  <p><strong>Amministratore:</strong> admin / password</p>
                 </div>
               </div>
             </div>

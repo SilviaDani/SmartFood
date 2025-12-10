@@ -134,16 +134,16 @@ export function AITraining({ onLogout }: AITrainingProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Brain className="w-5 h-5" />
-            AI Model Training
+            Addestramento Modello IA
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Model Selection */}
           <div className="space-y-2">
-            <Label htmlFor="model-select">Select Model</Label>
+            <Label htmlFor="model-select">Seleziona Modello</Label>
             <Select value={selectedModel} onValueChange={setSelectedModel} disabled={isTraining}>
               <SelectTrigger id="model-select">
-                <SelectValue placeholder="Choose a model to train..." />
+                <SelectValue placeholder="Scegli un modello da addestrare..." />
               </SelectTrigger>
               <SelectContent>
                 {MODELS.map((model) => (
@@ -165,19 +165,19 @@ export function AITraining({ onLogout }: AITrainingProps) {
 
           {/* Dataset Selection */}
           <div className="space-y-2">
-            <Label htmlFor="dataset-select">Select Dataset</Label>
+            <Label htmlFor="dataset-select">Seleziona Dataset</Label>
             {csvFiles.length === 0 ? (
               <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 flex gap-3">
                 <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
                 <div className="text-sm text-amber-800">
-                  <p className="font-medium mb-1">No datasets available</p>
-                  <p>Upload a CSV file first in the Data Entry section</p>
+                  <p className="font-medium mb-1">Nessun dataset disponibile</p>
+                  <p>Carica prima un file CSV nella sezione Inserimento Dati</p>
                 </div>
               </div>
             ) : (
               <Select value={selectedDataset} onValueChange={setSelectedDataset} disabled={isTraining}>
                 <SelectTrigger id="dataset-select">
-                  <SelectValue placeholder="Choose a dataset..." />
+                  <SelectValue placeholder="Scegli un dataset..." />
                 </SelectTrigger>
                 <SelectContent>
                   {csvFiles.map((file) => (
@@ -199,18 +199,18 @@ export function AITraining({ onLogout }: AITrainingProps) {
                 disabled={!selectedModel || !selectedDataset || csvFiles.length === 0}
               >
                 <Play className="w-4 h-4" />
-                Start Training
+                Inizia Addestramento
               </Button>
             ) : (
               <Button onClick={stopTraining} variant="destructive" className="flex items-center gap-2">
                 <Square className="w-4 h-4" />
-                Stop Training
+                Ferma Addestramento
               </Button>
             )}
             
             {isTraining && (
               <Badge variant="secondary" className="animate-pulse">
-                Training in progress...
+                Addestramento in corso...
               </Badge>
             )}
           </div>
@@ -219,7 +219,7 @@ export function AITraining({ onLogout }: AITrainingProps) {
           {isTraining && (
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>Training Progress</span>
+                <span>Progresso Addestramento</span>
                 <span>{Math.round(trainingProgress)}%</span>
               </div>
               <Progress value={trainingProgress} className="w-full" />
@@ -229,14 +229,14 @@ export function AITraining({ onLogout }: AITrainingProps) {
           {/* Results */}
           {trainingJob && !isTraining && trainingJob.status === 'completed' && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4 space-y-2">
-              <h4 className="font-medium text-green-900">Training Completed</h4>
+              <h4 className="font-medium text-green-900">Addestramento Completato</h4>
               <div className="grid grid-cols-2 gap-4 text-sm text-green-800">
                 <div>
-                  <p className="text-xs text-green-700">Model</p>
+                  <p className="text-xs text-green-700">Modello</p>
                   <p className="font-medium">{trainingJob.results?.model || selectedModel}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-green-700">Accuracy</p>
+                  <p className="text-xs text-green-700">Accuratezza</p>
                   <p className="font-medium">{(trainingJob.results?.accuracy * 100).toFixed(2)}%</p>
                 </div>
               </div>
@@ -245,15 +245,15 @@ export function AITraining({ onLogout }: AITrainingProps) {
 
           {/* Configuration Info */}
           <div className="bg-gray-50 p-4 rounded-lg">
-            <h4 className="text-sm font-medium mb-3">Training Configuration</h4>
+            <h4 className="text-sm font-medium mb-3">Configurazione Addestramento</h4>
             <div className="grid grid-cols-2 gap-4 text-xs text-gray-600">
               <div>
-                <p><strong>Model:</strong> {selectedModel ? MODELS.find(m => m.id === selectedModel)?.name : 'Not selected'}</p>
-                <p><strong>Dataset:</strong> {selectedDataset || 'Not selected'}</p>
+                <p><strong>Modello:</strong> {selectedModel ? MODELS.find(m => m.id === selectedModel)?.name : 'Non selezionato'}</p>
+                <p><strong>Dataset:</strong> {selectedDataset || 'Non selezionato'}</p>
               </div>
               <div>
-                <p><strong>Status:</strong> {isTraining ? 'Training...' : 'Ready'}</p>
-                <p><strong>Progress:</strong> {Math.round(trainingProgress)}%</p>
+                <p><strong>Stato:</strong> {isTraining ? 'Addestramento in corso...' : 'Pronto'}</p>
+                <p><strong>Progresso:</strong> {Math.round(trainingProgress)}%</p>
               </div>
             </div>
           </div>

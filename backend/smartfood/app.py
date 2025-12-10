@@ -3,9 +3,10 @@ Smart Food Backend - API Server
 Modulare e scalabile con Blueprints
 """
 
+from backend.smartfood.blueprints import training_task
 from flask import Flask
 from flask_cors import CORS
-from smartfood.blueprints import csv_upload, training, prediction
+from smartfood.blueprints import csv_upload, prediction
 
 def create_app():
     """Factory function per creare e configurare l'app Flask"""
@@ -17,7 +18,7 @@ def create_app():
     
     # Registra i blueprints
     app.register_blueprint(csv_upload.bp)
-    app.register_blueprint(training.bp)
+    app.register_blueprint(training_task.bp)
     app.register_blueprint(prediction.bp)
     
     # Health check endpoint

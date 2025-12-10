@@ -192,14 +192,14 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
         <div>
           <Button onClick={onBack} variant="ghost" className="mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
+            Torna al Pannello
           </Button>
           <div className="text-center space-y-2">
             <div className="flex items-center justify-center gap-2">
               <TrendingUp className="w-8 h-8 text-blue-600" />
-              <h1 className="text-3xl text-gray-900">Meal Predictions</h1>
+              <h1 className="text-3xl text-gray-900">Previsioni Pasti</h1>
             </div>
-            <p className="text-gray-600">Generate AI-powered predictions for meal portions at your selected school</p>
+            <p className="text-gray-600">Genera previsioni alimentate dall'IA per le porzioni di pasti presso la scuola selezionata</p>
           </div>
         </div>
 
@@ -214,28 +214,28 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
         {/* Controls */}
         <Card className="border-2 bg-white shadow-lg">
           <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-100 border-b">
-            <CardTitle className="text-2xl">⚙️ Prediction Settings</CardTitle>
-            <p className="text-sm text-gray-600 mt-1">Configure your forecast parameters</p>
+            <CardTitle className="text-2xl">⚙️ Impostazioni per le Previsioni</CardTitle>
+            <p className="text-sm text-gray-600 mt-1">Configura i parametri di previsione</p>
           </CardHeader>
           <CardContent className="space-y-6 pt-8">
             {loadingSchools ? (
               <div className="flex items-center justify-center py-12">
                 <Loader className="w-6 h-6 animate-spin text-blue-600 mr-2" />
-                <span className="text-gray-600">Loading schools...</span>
+                <span className="text-gray-600">Caricamento scuole...</span>
               </div>
             ) : schools.length === 0 ? (
               <div className="text-center py-8 bg-yellow-50 rounded-lg border border-yellow-200">
-                <p className="text-yellow-800 font-semibold">No Schools Available</p>
-                <p className="text-sm text-yellow-700 mt-1">Please upload CSV data first to get started</p>
+                <p className="text-yellow-800 font-semibold">Nessuna Scuola Disponibile</p>
+                <p className="text-sm text-yellow-700 mt-1">Carica i dati CSV per iniziare</p>
               </div>
             ) : (
               <>
                 {/* School Selector */}
                 <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
-                  <label className="block text-sm font-bold text-gray-800">🏫 School</label>
+                  <label className="block text-sm font-bold text-gray-800">🏫 Scuola</label>
                   <Select value={selectedSchool} onValueChange={setSelectedSchool}>
                     <SelectTrigger className="w-full border-2 border-gray-300 hover:border-blue-500">
-                      <SelectValue placeholder="Choose a school..." />
+                      <SelectValue placeholder="Seleziona una scuola..." />
                     </SelectTrigger>
                     <SelectContent style={{ backgroundColor: '#eff0f2ff', color: '#1f2937' }}>
                       {schools.map((school) => (
@@ -249,20 +249,20 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
 
                 {/* Dish Selector */}
                 <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
-                  <label className="block text-sm font-bold text-gray-800">🍽️ Dish Type</label>
+                  <label className="block text-sm font-bold text-gray-800">🍽️ Tipo di Piatto</label>
                   {loadingDishes ? (
                     <div className="flex items-center gap-2 py-3 px-4 bg-white rounded border-2 border-gray-300">
                       <Loader className="w-4 h-4 animate-spin text-blue-600" />
-                      <span className="text-gray-600 text-sm">Loading dishes...</span>
+                      <span className="text-gray-600 text-sm">Caricamento piatti...</span>
                     </div>
                   ) : dishes.length === 0 ? (
                     <div className="py-3 px-4 bg-white rounded border-2 border-gray-300 text-gray-500 text-sm">
-                      No dishes available for this school
+                      Nessun piatto disponibile per questa scuola
                     </div>
                   ) : (
                     <Select value={selectedDish} onValueChange={setSelectedDish}>
                       <SelectTrigger className="w-full border-2 border-gray-300 hover:border-blue-500">
-                        <SelectValue placeholder="Choose a dish..." />
+                        <SelectValue placeholder="Seleziona un piatto..." />
                       </SelectTrigger>
                       <SelectContent style={{ backgroundColor: '#eff0f2ff', color: '#1f2937' }}>
                         {dishes.map((dish) => (
@@ -274,33 +274,33 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
                     </Select>
                   )}
                   <p className="text-xs text-gray-500 mt-2">
-                    📌 Leave empty to predict for all dishes combined
+                    📌 Lascia vuoto per prevedere tutti i piatti combinati
                   </p>
                 </div>
 
                 {/* Model Selector */}
                                 {/* Model Selector */}
                 <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
-                  <label className="block text-sm font-bold text-gray-800">🤖 AI Model</label>
+                  <label className="block text-sm font-bold text-gray-800">🤖 Modello IA</label>
                   <Select value={selectedModel} onValueChange={setSelectedModel}>
                     <SelectTrigger className="w-full border-2 border-gray-300 hover:border-blue-500">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent style={{ backgroundColor: '#eff0f2ff', color: '#1f2937' }}>
-                      <SelectItem value="chronos">Chronos (Trend-based)</SelectItem>
-                      <SelectItem value="moment">MOMENT (Moving Average)</SelectItem>
+                      <SelectItem value="chronos">Chronos (Basato su Tendenze)</SelectItem>
+                      <SelectItem value="moment">MOMENT (Media Mobile)</SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-gray-500 mt-2">
                     {selectedModel === 'chronos'
-                      ? '📈 Uses trend analysis to predict future portions'
-                      : '📊 Uses moving average of historical data'}
+                      ? '📈 Utilizza l\'analisi delle tendenze per prevedere le porzioni future'
+                      : '📊 Utilizza la media mobile dei dati storici'}
                   </p>
                 </div>
 
                 {/* Forecast Days Slider */}
                 <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
-                  <label className="block text-sm font-bold text-gray-800">📅 Forecast Period</label>
+                  <label className="block text-sm font-bold text-gray-800">📅 Periodo di Previsione</label>
                   <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                     <PopoverTrigger asChild>
                       <Button variant="outline" className="w-full justify-start text-left h-auto py-3">
@@ -309,11 +309,11 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
                           <span className="text-sm">
                             {startDate && endDate
                               ? `${startDate.toLocaleDateString()} - ${endDate.toLocaleDateString()}`
-                              : 'Select date range...'}
+                              : 'Seleziona intervallo date...'}
                           </span>
                           {startDate && endDate && (
                             <span className="text-xs text-gray-500 mt-1">
-                              {countWorkingDays(startDate, endDate)} working days
+                              {countWorkingDays(startDate, endDate)} giorni lavorativi
                             </span>
                           )}
                         </div>
@@ -330,7 +330,7 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
                     </PopoverContent>
                   </Popover>
                   <p className="text-xs text-gray-500 mt-2">
-                    ℹ️ Weekends (Saturday & Sunday) are automatically excluded from predictions
+                    ℹ️ I fine settimana (sabato e domenica) vengono automaticamente esclusi dalle previsioni
                   </p>
                 </div>
 
@@ -368,12 +368,12 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
                   {loading ? (
                     <>
                       <Loader className="w-4 h-4 animate-spin" style={{ marginRight: '8px' }} />
-                      Generating...
+                      Generazione in corso...
                     </>
                   ) : (
                     <>
                       <TrendingUp className="w-4 h-4" style={{ marginRight: '8px' }} />
-                      Generate Predictions
+                      Genera Previsioni
                     </>
                   )}
                 </button>
@@ -381,7 +381,7 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
                 {/* Helper Text */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
                   <p className="text-sm text-blue-900">
-                    ✨ Click the button above to generate AI predictions for {selectedSchool}
+                    ✨ Clicca il bottone sopra per generare le previsioni IA per {selectedSchool}
                   </p>
                 </div>
               </>
@@ -399,12 +399,12 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
                   <div>
                     <CardTitle>{selectedSchool}</CardTitle>
                     <p className="text-sm text-gray-600 mt-1">
-                      {selectedDish && <span>Dish: <strong>{selectedDish}</strong> • </span>}
-                      {selectedModel.toUpperCase()} Model • {startDate && endDate && `${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}`}
+                      {selectedDish && <span>Piatto: <strong>{selectedDish}</strong> • </span>}
+                      {selectedModel.toUpperCase()} Model • {startDate && endDate && `${startDate.toLocaleDateString()} fino a ${endDate.toLocaleDateString()}`}
                     </p>
                   </div>
                   <div className="text-right text-sm text-gray-500">
-                    Generated: {generatedAt}
+                    Generato: {generatedAt}
                   </div>
                 </div>
               </CardHeader>
@@ -413,17 +413,17 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
             {/* Predictions Table */}
             <Card>
               <CardHeader>
-                <CardTitle>Forecast Details</CardTitle>
+                <CardTitle>Dettagli Previsioni</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-gray-200">
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">Date</th>
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">Predicted Portions</th>
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">Confidence</th>
-                        <th className="text-left py-3 px-4 font-semibold text-gray-700">Reliability</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">Data</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">Porzioni Previste</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">Confidenza</th>
+                        <th className="text-left py-3 px-4 font-semibold text-gray-700">Affidabilità</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -469,7 +469,7 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
               <Card>
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <p className="text-gray-600 text-sm mb-2">Average Portions</p>
+                    <p className="text-gray-600 text-sm mb-2">Porzioni Medie</p>
                     <p className="text-3xl font-bold text-gray-900">
                       {Math.round(
                         predictions.reduce((sum, p) => sum + p.portions, 0) / predictions.length
@@ -482,7 +482,7 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
               <Card>
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <p className="text-gray-600 text-sm mb-2">Average Confidence</p>
+                    <p className="text-gray-600 text-sm mb-2">Confidenza Media</p>
                     <p className="text-3xl font-bold text-gray-900">
                       {Math.round(
                         (predictions.reduce((sum, p) => sum + p.confidence, 0) / predictions.length) * 100
@@ -496,7 +496,7 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
               <Card>
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <p className="text-gray-600 text-sm mb-2">Forecast Range</p>
+                    <p className="text-gray-600 text-sm mb-2">Intervallo Previsioni</p>
                     <p className="text-3xl font-bold text-gray-900">
                       {Math.min(...predictions.map(p => p.portions))} - {Math.max(...predictions.map(p => p.portions))}
                     </p>
@@ -507,15 +507,15 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
 
             {/* Info Box */}
             <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
-              <h3 className="text-lg font-semibold text-blue-900 mb-3">Understanding Your Predictions</h3>
+              <h3 className="text-lg font-semibold text-blue-900 mb-3">Comprendere le Tue Previsioni</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800">
                 <div>
-                  <p><strong>High Confidence (90%+):</strong> Very reliable predictions based on consistent historical patterns</p>
-                  <p className="mt-2"><strong>Medium Confidence (80-89%):</strong> Good predictions with some variability expected</p>
+                  <p><strong>Confidenza Alta (90%+):</strong> Previsioni molto affidabili basate su schemi storici coerenti</p>
+                  <p className="mt-2"><strong>Confidenza Media (80-89%):</strong> Buone previsioni con qualche variabilità attesa</p>
                 </div>
                 <div>
-                  <p><strong>Lower Confidence ({`<`}80%):</strong> Use as guidance but prepare for higher variance</p>
-                  <p className="mt-2"><strong>Tip:</strong> Consider special events, holidays, and weather that may affect demand</p>
+                  <p><strong>Confidenza Bassa ({`<`}80%):</strong> Usa la previsione come indicazione, ma c'è possibilità per una varianza più alta</p>
+                  <p className="mt-2"><strong>Consiglio:</strong> Considera eventi speciali, festività e imprevisti che potrebbero influenzare la domanda</p>
                 </div>
               </div>
             </div>
@@ -529,9 +529,9 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
               <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
                 <TrendingUp className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="text-lg text-gray-900 mb-2">Ready to Forecast</h3>
+              <h3 className="text-lg text-gray-900 mb-2">Pronto per la Previsione</h3>
               <p className="text-gray-600">
-                Select a school, choose your AI model, and set the forecast period above to generate predictions.
+                Seleziona una scuola, scegli il tuo modello IA e imposta il periodo di previsione sopra per generare previsioni.
               </p>
             </div>
           </div>

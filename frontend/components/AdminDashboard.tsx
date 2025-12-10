@@ -71,8 +71,8 @@ export function AdminDashboard({ onLogout, username }: AdminDashboardProps) {
             <div className="flex items-center gap-3">
               <Shield className="w-8 h-8 text-blue-600" />
               <div>
-                <h1 className="text-2xl text-gray-900">Admin Dashboard</h1>
-                <p className="text-sm text-gray-600">Welcome back, {username}</p>
+                <h1 className="text-2xl text-gray-900">Pannello Amministratore</h1>
+                <p className="text-sm text-gray-600">Benvenuto, {username}</p>
               </div>
             </div>
             <Button onClick={onLogout} variant="outline">
@@ -85,62 +85,62 @@ export function AdminDashboard({ onLogout, username }: AdminDashboardProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="training">AI Training</TabsTrigger>
-            <TabsTrigger value="data">School Data</TabsTrigger>
-            <TabsTrigger value="entries">Recent Entries</TabsTrigger>
+            <TabsTrigger value="overview">Panoramica</TabsTrigger>
+            <TabsTrigger value="training">Addestramento IA</TabsTrigger>
+            <TabsTrigger value="data">Dati della Scuola</TabsTrigger>
+            <TabsTrigger value="entries">Inserimenti Recenti</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm">Total Schools</CardTitle>
+                  <CardTitle className="text-sm">Scuole Totali</CardTitle>
                   <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl">5</div>
-                  <p className="text-xs text-muted-foreground">Active schools</p>
+                  <p className="text-xs text-muted-foreground">Scuole attive</p>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm">Total Meals</CardTitle>
+                  <CardTitle className="text-sm">Pasti Totali</CardTitle>
                   <BarChart3 className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl">10,330</div>
-                  <p className="text-xs text-muted-foreground">This month</p>
+                  <p className="text-xs text-muted-foreground">Questo mese</p>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm">Avg. Waste Rate</CardTitle>
+                  <CardTitle className="text-sm">Tasso dello Spreco Medio</CardTitle>
                   <Database className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl">14.7%</div>
-                  <p className="text-xs text-muted-foreground">-2.1% from last month</p>
+                  <p className="text-xs text-muted-foreground">-2.1% dal mese scorso</p>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm">Model Accuracy</CardTitle>
+                  <CardTitle className="text-sm">Accuratezza Modello</CardTitle>
                   <Brain className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl">94.2%</div>
-                  <p className="text-xs text-muted-foreground">Latest training</p>
+                  <p className="text-xs text-muted-foreground">Ultimo addestramento</p>
                 </CardContent>
               </Card>
             </div>
 
             <Card>
               <CardHeader>
-                <CardTitle>Recent Training History</CardTitle>
+                <CardTitle>Storico Recente dell'Addestramento</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -150,11 +150,11 @@ export function AdminDashboard({ onLogout, username }: AdminDashboardProps) {
                         <Calendar className="w-5 h-5 text-gray-400" />
                         <div>
                           <p className="text-sm">{training.date}</p>
-                          <p className="text-xs text-gray-500">Duration: {training.duration}</p>
+                          <p className="text-xs text-gray-500">Durata: {training.duration}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
-                        <Badge variant="secondary">{training.accuracy}% accuracy</Badge>
+                        <Badge variant="secondary">{training.accuracy}% accuratezza</Badge>
                         <Badge variant="outline" className="text-green-600">
                           {training.status}
                         </Badge>
@@ -173,16 +173,16 @@ export function AdminDashboard({ onLogout, username }: AdminDashboardProps) {
           <TabsContent value="data" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>School Performance Overview</CardTitle>
+                <CardTitle>Panoramica Prestazioni Scuola</CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>School</TableHead>
-                      <TableHead>Total Meals</TableHead>
-                      <TableHead>Avg. Waste %</TableHead>
-                      <TableHead>Predictions Made</TableHead>
+                      <TableHead>Scuola</TableHead>
+                      <TableHead>Pasti Totali</TableHead>
+                      <TableHead>% Spreco Medio</TableHead>
+                      <TableHead>Previsioni Effettuate</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -209,18 +209,18 @@ export function AdminDashboard({ onLogout, username }: AdminDashboardProps) {
           <TabsContent value="entries" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Recent Data Entries</CardTitle>
+                <CardTitle>Dati Inseriti Recentemente</CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>School</TableHead>
-                      <TableHead>Dish</TableHead>
-                      <TableHead>Prepared</TableHead>
-                      <TableHead>Wasted</TableHead>
-                      <TableHead>Waste %</TableHead>
+                      <TableHead>Data</TableHead>
+                      <TableHead>Scuola</TableHead>
+                      <TableHead>Piatto</TableHead>
+                      <TableHead>Preparato</TableHead>
+                      <TableHead>Spreco</TableHead>
+                      <TableHead>% Sreco</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

@@ -99,10 +99,10 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
         <div className="mb-8">
           <Button onClick={onBack} variant="ghost" className="mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Dashboard
+            Torna al Pannello
           </Button>
-          <h1 className="text-3xl text-gray-900">Enter Meal Data</h1>
-          <p className="text-gray-600 mt-2">Record information about prepared meals and food waste</p>
+          <h1 className="text-3xl text-gray-900">Inserisci i Dati del Pasto</h1>
+          <p className="text-gray-600 mt-2">Registra informazioni sui pasti preparati e sulle porzioni sprecate</p>
         </div>
 
         {/* Tabs Container */}
@@ -110,11 +110,11 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="single" className="flex items-center gap-2">
               <Save className="w-4 h-4" />
-              Single Entry
+              Singolo Inserimento
             </TabsTrigger>
             <TabsTrigger value="csv" className="flex items-center gap-2">
               <Upload className="w-4 h-4" />
-              Bulk Upload
+              Caricamento in massa
             </TabsTrigger>
           </TabsList>
 
@@ -122,16 +122,16 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
           <TabsContent value="single" className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Meal Information</CardTitle>
+                <CardTitle>Informazioni Pasto</CardTitle>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
               {/* School Selection */}
               <div className="space-y-2">
-                <Label htmlFor="school">School *</Label>
+                <Label htmlFor="school">Scuola *</Label>
                 <Select value={formData.school} onValueChange={(value) => setFormData({...formData, school: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a school..." />
+                    <SelectValue placeholder="Seleziona una scuola..." />
                   </SelectTrigger>
                   <SelectContent>
                     {schools.map((school) => (
@@ -145,7 +145,7 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
 
               {/* Date Selection */}
               <div className="space-y-2">
-                <Label>Date *</Label>
+                <Label>Data *</Label>
                 <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="w-full justify-start text-left">
@@ -171,10 +171,10 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
 
               {/* Dish Category */}
               <div className="space-y-2">
-                <Label htmlFor="category">Dish Category *</Label>
+                <Label htmlFor="category">Categoria Piatto *</Label>
                 <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a category..." />
+                    <SelectValue placeholder="Seleziona una categoria..." />
                   </SelectTrigger>
                   <SelectContent style={{ backgroundColor: '#e5e7eb', color: '#1f2937' }}>
                     {DISH_CATEGORIES.map((cat) => (
@@ -186,20 +186,20 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="dishName">Dish Name *</Label>
+                <Label htmlFor="dishName">Nome del Piatto *</Label>
                 <Input
                   id="dishName"
                   type="text"
                   value={formData.dishName}
                   onChange={(e) => setFormData({...formData, dishName: e.target.value})}
-                  placeholder="e.g., Spaghetti with Marinara Sauce"
+                  placeholder="es. Spaghetti con Salsa di Pomodoro"
                   required
                 />
               </div>
 
               {/* Portions Prepared */}
               <div className="space-y-2">
-                <Label htmlFor="portionsPrepared">Portions Prepared *</Label>
+                <Label htmlFor="portionsPrepared">Porzioni Preparate *</Label>
                 <Input
                   id="portionsPrepared"
                   type="number"
@@ -213,7 +213,7 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
 
               {/* Portions Wasted */}
               <div className="space-y-2">
-                <Label htmlFor="portionsWasted">Portions Wasted</Label>
+                <Label htmlFor="portionsWasted">Porzioni Sprecate</Label>
                 <Input
                   id="portionsWasted"
                   type="number"
@@ -223,7 +223,7 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
                   onChange={(e) => setFormData({...formData, portionsWasted: e.target.value})}
                   placeholder="15"
                 />
-                <p className="text-xs text-gray-500">Leave empty if no waste occurred</p>
+                <p className="text-xs text-gray-500">Lascia vuoto se non c'è stato spreco</p>
               </div>
 
               {/* Waste Summary */}
@@ -231,15 +231,15 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <div className="flex items-center gap-2 mb-2">
                     <AlertCircle className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm text-gray-700">Waste Summary</span>
+                    <span className="text-sm text-gray-700">Riepilogo Spreco</span>
                   </div>
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="text-gray-600">Portions Served:</p>
+                      <p className="text-gray-600">Porzioni Servite:</p>
                       <p className="text-lg">{parseInt(formData.portionsPrepared) - parseInt(formData.portionsWasted)}</p>
                     </div>
                     <div>
-                      <p className="text-gray-600">Waste Percentage:</p>
+                      <p className="text-gray-600">Percentuale Spreco:</p>
                       <p className={`text-lg ${wastePercentage > 15 ? 'text-red-600' : wastePercentage > 10 ? 'text-orange-600' : 'text-green-600'}`}>
                         {wastePercentage}%
                       </p>
@@ -258,17 +258,17 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
                   {isSubmitting ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Saving...
+                      Salvataggio in corso...
                     </>
                   ) : (
                     <>
                       <Save className="w-4 h-4 mr-2" />
-                      Save Entry
+                      Salva Inserimento
                     </>
                   )}
                 </Button>
                 <Button type="button" variant="outline" onClick={onBack}>
-                  Cancel
+                  Annulla
                 </Button>
               </div>
             </form>
@@ -277,8 +277,8 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
 
             {/* Help Text */}
             <div className="text-center text-sm text-gray-600">
-              <p>Make sure to enter accurate data to help improve prediction models.</p>
-              <p>All fields marked with * are required.</p>
+              <p>Assicurati di inserire i dati accurati per aiutare a migliorare i modelli di previsione.</p>
+              <p>Tutti i campi contrassegnati con * sono obbligatori.</p>
             </div>
           </TabsContent>
 
@@ -288,8 +288,8 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
 
             {/* Help Text */}
             <div className="text-center text-sm text-gray-600">
-              <p>Upload multiple entries at once using a CSV file.</p>
-              <p>This is the fastest way to import large amounts of data.</p>
+              <p>Carica più inserimenti contemporaneamente usando un file CSV.</p>
+              <p>Questo è il modo più veloce per importare grandi quantità di dati.</p>
             </div>
           </TabsContent>
         </Tabs>
