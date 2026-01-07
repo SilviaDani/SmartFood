@@ -1,26 +1,68 @@
 version: '3.9'
 
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: smartfood_redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
   backend:
     build:
       context: ./backend
     container_name: smartfood_backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python app.py
     volumes:
-      #- ./backend:/app
       - ./backend/smartfood/uploads:/app/uploads
+      - ./backend/smartfood/trained_models:/app/trained_models
     ports:
       - "8000:8000"
     environment:
       - DEBUG=True
-      - INFLUXDB_URL=http://localhost:8086
+      - FLASK_ENV=development
+      - DATABASE_URL=sqlite:///./smartfood.db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - INFLUXDB_URL=http://influxdb:8086
       - INFLUXDB_TOKEN=9SUJ_bmJB7eSQz5OWS0nPLClLn2TByE-bnh6hyIjTBbC33mZBvZi51LEPWELdgJpoCXPxKWXs0Bx_CvXQOrSiw==
       - INFLUXDB_ORG=smart_food
       - INFLUXDB_BUCKET=smart_food_bucket_2023-2024-2025
-      - DJANGO_SETTINGS_MODULE=smartfood.settings
     depends_on:
-      - influxdb
+      redis:
+        condition: service_healthy
+      influxdb:
+        condition: service_started
 
+  celery_worker:
+    build:
+      context: ./backend
+    container_name: smartfood_celery_worker
+    command: celery -A celery_app worker --loglevel=info --concurrency=1 --max-tasks-per-child=100
+    volumes:
+      - ./backend/smartfood/trained_models:/app/trained_models
+      - ./backend/smartfood/uploads:/app/uploads
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_URL=sqlite:///./smartfood.db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+      - INFLUXDB_URL=http://influxdb:8086
+      - INFLUXDB_TOKEN=9SUJ_bmJB7eSQz5OWS0nPLClLn2TByE-bnh6hyIjTBbC33mZBvZi51LEPWELdgJpoCXPxKWXs0Bx_CvXQOrSiw==
+      - INFLUXDB_ORG=smart_food
+      - INFLUXDB_BUCKET=smart_food_bucket_2023-2024-2025
+    depends_on:
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_started
 
   frontend:
     build: ./frontend
@@ -54,3 +96,4 @@ services:
 
 volumes:
   influxdb_data:
+  redis_data:

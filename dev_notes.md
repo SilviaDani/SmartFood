@@ -5,7 +5,7 @@
 
   ## How to run the code locally for testing purpouses (without docker)
 
-  Need 2 terminals, one running the backend and one running the frontend
+  Need 2 terminals *if you do not want to test the training queue*: one running the backend and one running the frontend
 
   ## Running the frontend
 
@@ -17,8 +17,23 @@
   (need more testing and research)
 
   # first activate the conda enviromnent
-    conda activate <name_of_the_env> (e.g. smartF311)
+   `conda activate <name_of_the_env>` (e.g. smartF311)
   # then change directory and go in the backend
-    cd backend
+   `cd backend`
   # finally run the code
-    python -m smartfood.app
+   `python -m smartfood.app`
+  
+## To test Training Queue
+
+  *Need 2 more terminals*, and you need redis installed locally. Can be found here: https://github.com/microsoftarchive/redis/releases 
+  
+  Also, remember to update the requirements using:
+    `pip install -r requirements.txt`
+  Best if installed in an environment
+
+  # Terminal 1: Redis
+  `redis-server`
+
+  # Terminal 2: Celery Worker
+  `cd backend`
+  `celery -A smartfood.celery_app worker --loglevel=info`
