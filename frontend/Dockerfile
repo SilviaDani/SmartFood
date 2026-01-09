@@ -4,25 +4,26 @@
 FROM node:20-alpine AS builder
 
 WORKDIR /app
-COPY package*.json ./
-RUN npm ci
+COPY . .
+RUN npm install --include=dev
+RUN npm install -g vite
 
 # Build the Vite app
-COPY frontend/ .
 RUN npm run build
 
-# Stage 2: Runtime distroless
-FROM gcr.io/distroless/nodejs20-nonroot:nonroot
+# Stage 2: Runtime (Alpine è leggero)
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy built application e node_modules dal builder
+# Copy built application dal builder
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package*.json ./
+
+# Install un HTTP server leggero
+RUN npm install -g serve
 
 # Expose port
 EXPOSE 3000
 
-# Run the app
-CMD ["node", "--loader=./node_modules/vite/dist/client/entry.mjs", "dist/index.html"]
+# Serve static files
+CMD ["serve", "-s", "dist", "-l", "3000"]

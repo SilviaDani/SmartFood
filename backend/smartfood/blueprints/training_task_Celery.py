@@ -16,8 +16,8 @@ logger = logging.getLogger(__name__)
 bp = Blueprint('training', __name__, url_prefix='/api')
 
 # Crea istanze dei services
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'uploads')
-MODELS_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'trained_models')
+UPLOAD_FOLDER = '/app/uploads'
+MODELS_FOLDER = '/app/trained_models'
 dataset_service = DatasetService(UPLOAD_FOLDER)
 
 

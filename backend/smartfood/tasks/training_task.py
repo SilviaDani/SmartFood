@@ -13,6 +13,12 @@ from smartfood.celery_app import celery_app
 logger = logging.getLogger(__name__)
 
 
+def get_flask_app():
+    """Importa l'app Flask"""
+    from smartfood.app import create_app
+    return create_app()
+
+
 @shared_task(bind=True, max_retries=5)
 def train_model(self, job_id: str, dataset_path: str, model_id: str):
     """
@@ -26,71 +32,75 @@ def train_model(self, job_id: str, dataset_path: str, model_id: str):
     Returns:
         dict: Risultati dell'addestramento
     """
-    try:
-        # Aggiorna il job nello stato RUNNING
-        job = TrainingJob.query.get(job_id)
-        if not job:
-            logger.error(f"Job {job_id} not found")
-            raise ValueError(f"Job {job_id} not found")
-        
-        job.status = JobStatus.RUNNING.value
-        job.started_at = datetime.utcnow()
-        job.celery_task_id = self.request.id
-        db.session.commit()
-        
-        logger.info(f"Starting training for job {job_id}: model={model_id}, dataset={dataset_path}")
-        
-        # Chiama la funzione di training appropriata basata sul modello
-        if model_id == 'chronos':
-            result = _train_chronos(job_id, dataset_path)
-        elif model_id == 'moment':
-            result = _train_moment(job_id, dataset_path)
-        else:
-            raise ValueError(f"Unknown model: {model_id}")
-        
-        # Aggiorna il job con i risultati
-        job.status = JobStatus.COMPLETED.value
-        job.completed_at = datetime.utcnow()
-        job.progress = 100
-        job.accuracy = result.get('accuracy')
-        job.loss = result.get('loss')
-        job.metrics = result.get('metrics')
-        job.model_path = result.get('model_path')
-        db.session.commit()
-        
-        logger.info(f"Training completed for job {job_id}: accuracy={job.accuracy}")
-        
-        return {
-            'status': 'completed',
-            'job_id': job_id,
-            'accuracy': job.accuracy,
-            'model_path': job.model_path,
-        }
+    # Usa il Flask app context
+    app = get_flask_app()
     
-    except Exception as exc:
-        logger.error(f"Training failed for job {job_id}: {str(exc)}", exc_info=True)
-        
-        job = TrainingJob.query.get(job_id)
-        if job:
-            job.error_message = str(exc)
-            job.retry_count += 1
+    with app.app_context():
+        try:
+            # Aggiorna il job nello stato RUNNING
+            job = TrainingJob.query.get(job_id)
+            if not job:
+                logger.error(f"Job {job_id} not found")
+                raise ValueError(f"Job {job_id} not found")
             
-            # Se possiamo riprovare, riprova
-            if job.can_retry():
-                job.status = JobStatus.PENDING.value
-                db.session.commit()
-                
-                # Riprogramma il task
-                logger.info(f"Retrying job {job_id} (attempt {job.retry_count}/{job.max_retries})")
-                raise self.retry(exc=exc, countdown=60)  # Retry dopo 60 secondi
+            job.status = JobStatus.RUNNING.value
+            job.started_at = datetime.utcnow()
+            job.celery_task_id = self.request.id
+            db.session.commit()
+            
+            logger.info(f"Starting training for job {job_id}: model={model_id}, dataset={dataset_path}")
+            
+            # Chiama la funzione di training appropriata basata sul modello
+            if model_id == 'chronos':
+                result = _train_chronos(job_id, dataset_path)
+            elif model_id == 'moment':
+                result = _train_moment(job_id, dataset_path)
             else:
-                # Max retry raggiunto, fallimento permanente
-                job.status = JobStatus.FAILED.value
-                job.completed_at = datetime.utcnow()
-                db.session.commit()
-                logger.error(f"Job {job_id} failed after {job.max_retries} retries")
+                raise ValueError(f"Unknown model: {model_id}")
+            
+            # Aggiorna il job con i risultati
+            job.status = JobStatus.COMPLETED.value
+            job.completed_at = datetime.utcnow()
+            job.progress = 100
+            job.accuracy = result.get('accuracy')
+            job.loss = result.get('loss')
+            job.metrics = result.get('metrics')
+            job.model_path = result.get('model_path')
+            db.session.commit()
+            
+            logger.info(f"Training completed for job {job_id}: accuracy={job.accuracy}")
+            
+            return {
+                'status': 'completed',
+                'job_id': job_id,
+                'accuracy': job.accuracy,
+                'model_path': job.model_path,
+            }
         
-        raise
+        except Exception as exc:
+            logger.error(f"Training failed for job {job_id}: {str(exc)}", exc_info=True)
+            
+            job = TrainingJob.query.get(job_id)
+            if job:
+                job.error_message = str(exc)
+                job.retry_count += 1
+                
+                # Se possiamo riprovare, riprova
+                if job.can_retry():
+                    job.status = JobStatus.PENDING.value
+                    db.session.commit()
+                    
+                    # Riprogramma il task
+                    logger.info(f"Retrying job {job_id} (attempt {job.retry_count}/{job.max_retries})")
+                    raise self.retry(exc=exc, countdown=60)  # Retry dopo 60 secondi
+                else:
+                    # Max retry raggiunto, fallimento permanente
+                    job.status = JobStatus.FAILED.value
+                    job.completed_at = datetime.utcnow()
+                    db.session.commit()
+                    logger.error(f"Job {job_id} failed after {job.max_retries} retries")
+            
+            raise
 
 
 def _train_chronos(job_id: str, dataset_path: str) -> dict:

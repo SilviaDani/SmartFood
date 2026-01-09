@@ -1,4 +1,4 @@
-version: '3.9'
+#version: '3.9'
 
 services:
   redis:
@@ -28,7 +28,7 @@ services:
     environment:
       - DEBUG=True
       - FLASK_ENV=development
-      - DATABASE_URL=sqlite:///./smartfood.db
+      - DATABASE_URL=sqlite:////app/uploads/smartfood.db
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
       - INFLUXDB_URL=http://influxdb:8086
@@ -45,19 +45,20 @@ services:
     build:
       context: ./backend
     container_name: smartfood_celery_worker
-    command: celery -A celery_app worker --loglevel=info --concurrency=1 --max-tasks-per-child=100
+    command: celery -A smartfood.celery_app worker --loglevel=info --concurrency=1 --max-tasks-per-child=100
     volumes:
       - ./backend/smartfood/trained_models:/app/trained_models
       - ./backend/smartfood/uploads:/app/uploads
     environment:
       - FLASK_ENV=development
-      - DATABASE_URL=sqlite:///./smartfood.db
+      - DATABASE_URL=sqlite:////app/uploads/smartfood.db
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
       - INFLUXDB_URL=http://influxdb:8086
       - INFLUXDB_TOKEN=9SUJ_bmJB7eSQz5OWS0nPLClLn2TByE-bnh6hyIjTBbC33mZBvZi51LEPWELdgJpoCXPxKWXs0Bx_CvXQOrSiw==
       - INFLUXDB_ORG=smart_food
       - INFLUXDB_BUCKET=smart_food_bucket_2023-2024-2025
+      - PYTHONPATH=/app
     depends_on:
       redis:
         condition: service_healthy
@@ -89,8 +90,6 @@ services:
       - DOCKER_INFLUXDB_INIT_BUCKET=smart_food_bucket_2023-2024-2025
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=9SUJ_bmJB7eSQz5OWS0nPLClLn2TByE-bnh6hyIjTBbC33mZBvZi51LEPWELdgJpoCXPxKWXs0Bx_CvXQOrSiw==
       - REACT_APP_API_URL=http://backend:8000
-    depends_on:
-      - backend
     volumes:
       - influxdb_data:/var/lib/influxdb2
 

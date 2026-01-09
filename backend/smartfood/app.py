@@ -8,7 +8,7 @@ from flask import Flask
 from flask_cors import CORS
 from smartfood.models import db
 from smartfood.celery_app import celery_app
-from smartfood.blueprints import csv_upload, prediction, training_task
+from smartfood.blueprints import csv_upload, prediction, training_task_Celery as training_task
 
 
 def create_app():

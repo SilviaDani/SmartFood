@@ -9,10 +9,10 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y libpq-dev gcc && pip install --upgrade pip
 
 # Copy requirements
-COPY backend/requirements.txt .
+COPY requirements.txt .
 
 # Install Python dependencies in a virtual environment
-RUN pip install --user -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Stage 2: Runtime (slim - molto leggero comunque)
 FROM python:3.11-slim
@@ -20,14 +20,15 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy Python packages from builder
-COPY --from=builder /root/.local /root/.local
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy application code
-COPY backend/ .
+COPY . .
 
-# Set PATH to use user packages
-ENV PATH=/root/.local/bin:$PATH
+# Set ENV
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app:/app/smartfood
 
 # Create non-root user per sicurezza
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
@@ -36,5 +37,6 @@ USER appuser
 # Expose port
 EXPOSE 8000
 
-# Run server
-CMD ["python", "-m", "manage", "runserver", "0.0.0.0:8000"]
+# Run server from /app/smartfood directory
+WORKDIR /app/smartfood
+CMD ["python", "app.py"]

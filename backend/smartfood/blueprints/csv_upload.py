@@ -10,7 +10,7 @@ import os
 bp = Blueprint('csv_upload', __name__, url_prefix='/api')
 
 # Crea un'istanza del service
-UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'uploads')
+UPLOAD_FOLDER = '/app/uploads'
 dataset_service = DatasetService(UPLOAD_FOLDER)
 
 @bp.route('/csv/upload', methods=['POST'])

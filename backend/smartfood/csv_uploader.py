@@ -115,7 +115,7 @@ def save_csv_to_database(rows):
     """
     Salva i dati del CSV nel database (InfluxDB)
     
-    Nota: Implementa qui la logica per salvare su InfluxDB
+    Nota: Implementa in questa funzione la logica per salvare su InfluxDB
     Per ora, salva semplicemente in un file per testing
     """
     try:

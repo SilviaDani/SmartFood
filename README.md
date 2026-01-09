@@ -45,9 +45,9 @@ To build the image:
 - docker-compose up -d
 
 To delete the image and rebuild it from scratch:
-- docker-compose down -v
-- docker-compose build --no-cache
-- docker-compose up
+docker-compose down
+docker system prune -a -f
+docker-compose up -d --build
 
 Turn Docker off:
 - docker-compose down
@@ -62,6 +62,9 @@ Turn Docker off:
 
   # Confronta le dimensioni
   docker images | grep smartfood
+
+  # Dopo che le immagini Distroless sono state costruite
+  docker-compose up -d
 
 ## CSV Upload Feature
 
