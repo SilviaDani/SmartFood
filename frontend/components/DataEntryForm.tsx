@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { CalendarIcon, ArrowLeft, Save, AlertCircle, Upload } from 'lucide-react';
 import { format } from 'date-fns';
+import { it } from 'date-fns/locale';
 import { toast } from 'sonner';
 import { CSVUploader } from './CSVUploader';
 import { DISH_CATEGORIES } from '../lib/dishCategories';
@@ -150,7 +151,7 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
                   <PopoverTrigger asChild>
                     <Button variant="outline" className="w-full justify-start text-left">
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {format(formData.date, 'PPP')}
+                      {format(formData.date, 'PPP', { locale: it })}
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
@@ -164,6 +165,7 @@ export function DataEntryForm({ onBack }: DataEntryFormProps) {
                         }
                       }}
                       initialFocus
+                      locale={it}
                     />
                   </PopoverContent>
                 </Popover>

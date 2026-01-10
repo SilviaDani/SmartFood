@@ -15,25 +15,25 @@ interface AdminDashboardProps {
 
 // Mock data for admin dashboard
 const trainingHistory = [
-  { id: 1, date: '2024-10-01', duration: '2h 15m', accuracy: 94.2, status: 'completed' },
-  { id: 2, date: '2024-09-28', duration: '1h 45m', accuracy: 92.8, status: 'completed' },
-  { id: 3, date: '2024-09-25', duration: '2h 30m', accuracy: 91.5, status: 'completed' },
+  { id: 1, date: '2024-10-01', duration: '2h 15m', accuracy: 94.2, status: 'completato' },
+  { id: 2, date: '2024-09-28', duration: '1h 45m', accuracy: 92.8, status: 'completato' },
+  { id: 3, date: '2024-09-25', duration: '2h 30m', accuracy: 91.5, status: 'completato' },
 ];
 
 const schoolStats = [
-  { school: 'Lincoln Elementary', totalMeals: 1250, avgWaste: 12.5, predictions: 45 },
-  { school: 'Washington Middle', totalMeals: 2100, avgWaste: 15.8, predictions: 62 },
-  { school: 'Roosevelt High', totalMeals: 3200, avgWaste: 18.2, predictions: 78 },
-  { school: 'Jefferson Primary', totalMeals: 980, avgWaste: 10.3, predictions: 38 },
-  { school: 'Kennedy Secondary', totalMeals: 2800, avgWaste: 16.9, predictions: 71 },
+  { school: 'scuola elementare Dante Alighieri', totalMeals: 1250, avgWaste: 12.5, predictions: 45 },
+  { school: 'scuola media P. Vasari', totalMeals: 2100, avgWaste: 15.8, predictions: 62 },
+  { school: 'liceo Da Vinci', totalMeals: 3200, avgWaste: 18.2, predictions: 78 },
+  { school: 'scuola primaria Dante Alighieri', totalMeals: 980, avgWaste: 10.3, predictions: 38 },
+  { school: 'scuola secondaria Masaccio', totalMeals: 2800, avgWaste: 16.9, predictions: 71 },
 ];
 
 const recentEntries = [
-  { id: 1, date: '2024-10-02', school: 'Lincoln Elementary', dish: 'Spaghetti Marinara', prepared: 120, wasted: 15 },
-  { id: 2, date: '2024-10-02', school: 'Washington Middle', dish: 'Chicken Tacos', prepared: 180, wasted: 22 },
-  { id: 3, date: '2024-10-01', school: 'Roosevelt High', dish: 'Veggie Burger', prepared: 200, wasted: 35 },
-  { id: 4, date: '2024-10-01', school: 'Jefferson Primary', dish: 'Mac and Cheese', prepared: 95, wasted: 8 },
-  { id: 5, date: '2024-10-01', school: 'Kennedy Secondary', dish: 'Fish Sandwich', prepared: 160, wasted: 28 },
+  { id: 1, date: '2024-10-02', school: 'scuola elementare Dante Alighieri', dish: 'Spaghetti alla Marinara', prepared: 120, wasted: 15 },
+  { id: 2, date: '2024-10-02', school: 'scuola media P. Vasari', dish: 'Petto di pollo', prepared: 180, wasted: 22 },
+  { id: 3, date: '2024-10-01', school: 'liceo Da Vinci', dish: 'Burger Vegetale', prepared: 200, wasted: 35 },
+  { id: 4, date: '2024-10-01', school: 'scuola primaria Dante Alighieri', dish: 'Pasta al Pesto', prepared: 95, wasted: 8 },
+  { id: 5, date: '2024-10-01', school: 'scuola secondaria Masaccio', dish: 'Pesce alla Diavola', prepared: 160, wasted: 28 },
 ];
 
 export function AdminDashboard({ onLogout, username }: AdminDashboardProps) {

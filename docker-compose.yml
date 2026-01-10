@@ -35,6 +35,12 @@ services:
       - INFLUXDB_TOKEN=9SUJ_bmJB7eSQz5OWS0nPLClLn2TByE-bnh6hyIjTBbC33mZBvZi51LEPWELdgJpoCXPxKWXs0Bx_CvXQOrSiw==
       - INFLUXDB_ORG=smart_food
       - INFLUXDB_BUCKET=smart_food_bucket_2023-2024-2025
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
     depends_on:
       redis:
         condition: service_healthy
@@ -63,7 +69,7 @@ services:
       redis:
         condition: service_healthy
       backend:
-        condition: service_started
+        condition: service_healthy
 
   frontend:
     build: ./frontend
@@ -75,7 +81,8 @@ services:
     environment:
       - VITE_API_URL=http://backend:8000
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
   influxdb:
     image: influxdb:2.7

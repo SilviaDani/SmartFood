@@ -84,7 +84,10 @@ export function AITraining({ onLogout }: AITrainingProps) {
     };
   }, [trainingJobs]);
 
-  const loadAvailableDatasets = async () => {
+  const loadAvailableDatasets = async (retryCount = 0) => {
+    const maxRetries = 5;
+    const baseDelay = 1000; // 1 second
+    
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       const response = await fetch(`${apiUrl}/api/datasets`);
@@ -92,10 +95,28 @@ export function AITraining({ onLogout }: AITrainingProps) {
       if (response.ok) {
         const data = await response.json();
         setCsvFiles(data.files || []);
+      } else if (retryCount < maxRetries) {
+        // Se il backend non è pronto, riprova con backoff esponenziale
+        const delay = baseDelay * Math.pow(2, retryCount);
+        console.warn(`Backend not ready, retrying in ${delay}ms (attempt ${retryCount + 1}/${maxRetries})`);
+        
+        setTimeout(() => {
+          loadAvailableDatasets(retryCount + 1);
+        }, delay);
       }
     } catch (error) {
-      console.error('Failed to load datasets:', error);
-      toast.error('Could not load available datasets');
+      if (retryCount < maxRetries) {
+        // Errore di connessione, riprova
+        const delay = baseDelay * Math.pow(2, retryCount);
+        console.debug(`Failed to load datasets, retrying in ${delay}ms (attempt ${retryCount + 1}/${maxRetries}):`, error);
+        
+        setTimeout(() => {
+          loadAvailableDatasets(retryCount + 1);
+        }, delay);
+      } else {
+        console.error('Failed to load datasets after max retries:', error);
+        toast.error('Could not connect to backend. Please refresh the page.');
+      }
     }
   };
 
