@@ -22,7 +22,7 @@ const trainingHistory = [
 
 const schoolStats = [
   { school: 'scuola elementare Dante Alighieri', totalMeals: 1250, avgWaste: 12.5, predictions: 45 },
-  { school: 'scuola media P. Vasari', totalMeals: 2100, avgWaste: 15.8, predictions: 62 },
+  { school: 'scuola media G. Vasari', totalMeals: 2100, avgWaste: 15.8, predictions: 62 },
   { school: 'liceo Da Vinci', totalMeals: 3200, avgWaste: 18.2, predictions: 78 },
   { school: 'scuola primaria Dante Alighieri', totalMeals: 980, avgWaste: 10.3, predictions: 38 },
   { school: 'scuola secondaria Masaccio', totalMeals: 2800, avgWaste: 16.9, predictions: 71 },
