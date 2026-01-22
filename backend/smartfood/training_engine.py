@@ -10,6 +10,7 @@ from datetime import datetime
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from threading import Thread
+from smartfood.utils.model_registry import get_model_registry
 
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:5173", "http://localhost:3000"])
@@ -24,6 +25,7 @@ os.makedirs(MODELS_FOLDER, exist_ok=True)
 
 # Salva lo stato dei job (in produzione usa Redis o DB)
 training_jobs = {}
+model_registry = get_model_registry()
 
 @app.route('/api/datasets', methods=['GET'])
 def list_datasets():
@@ -59,11 +61,12 @@ def start_training():
                 "message": "model_id e dataset_id sono obbligatori"
             }), 400
         
-        # Valida il modello
-        if model_id not in ['moment', 'chronos']:
+        # Valida il modello in modo dinamico
+        if not model_registry.is_model_available(model_id):
+            available = ', '.join(model_registry.get_available_models())
             return jsonify({
                 "success": False,
-                "message": f"Model '{model_id}' not supported. Use: moment, chronos"
+                "message": f"Model '{model_id}' not supported. Available models: {available}"
             }), 400
         
         # Valida il dataset

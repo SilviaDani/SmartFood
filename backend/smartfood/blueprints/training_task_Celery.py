@@ -10,6 +10,7 @@ from flask import Blueprint, request, jsonify
 from smartfood.models import TrainingJob, JobStatus, db
 from smartfood.services import DatasetService
 from smartfood.tasks.training_task import train_model
+from smartfood.utils.model_registry import get_model_registry
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,7 @@ bp = Blueprint('training', __name__, url_prefix='/api')
 
 # Crea istanze dei services
 UPLOAD_FOLDER = '/app/uploads'
+model_registry = get_model_registry()
 MODELS_FOLDER = '/app/trained_models'
 dataset_service = DatasetService(UPLOAD_FOLDER)
 
@@ -65,11 +67,12 @@ def start_training():
                 "message": "model_id e dataset_id sono obbligatori"
             }), 400
         
-        # Valida il modello
-        if model_id not in ['moment', 'chronos']:
+        # Valida il modello in modo dinamico
+        if not model_registry.is_model_available(model_id):
+            available = ', '.join(model_registry.get_available_models())
             return jsonify({
                 "success": False,
-                "message": f"Model '{model_id}' not supported. Use: moment, chronos"
+                "message": f"Model '{model_id}' not supported. Available models: {available}"
             }), 400
         
         # Valida il dataset

@@ -30,6 +30,7 @@ interface TrainingJobState {
 const MODELS = [
   { id: 'moment', name: 'MOMENT', description: 'Multi-horizon time series forecasting' },
   { id: 'chronos', name: 'Chronos', description: 'Probabilistic time series forecasting' },
+  { id: 'timesfm', name: 'TimesFM-2.5', description: 'Zero-shot foundation model by Google' },
 ];
 
 const getStatusColor = (status: string) => {

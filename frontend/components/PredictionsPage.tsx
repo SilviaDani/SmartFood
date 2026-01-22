@@ -40,6 +40,8 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState<string>('chronos');
+  const [availableModels, setAvailableModels] = useState<any[]>([]);
+  const [loadingModels, setLoadingModels] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingSchools, setLoadingSchools] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -52,6 +54,7 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
   // Carica la lista delle scuole all'avvio
   useEffect(() => {
     loadSchools();
+    loadModels();
   }, []);
 
   // Carica i piatti quando cambia la scuola selezionata
@@ -87,6 +90,39 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
       setSchools([]);
     } finally {
       setLoadingSchools(false);
+    }
+  };
+
+  const loadModels = async () => {
+    try {
+      setLoadingModels(true);
+      
+      const response = await fetch(`${API_BASE_URL}/api/models/detailed`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to load models');
+      }
+      
+      const data = await response.json();
+      
+      if (data.success && Array.isArray(data.models)) {
+        setAvailableModels(data.models);
+        // Imposta il primo modello come default
+        if (data.models.length > 0) {
+          setSelectedModel(data.models[0].name);
+        }
+      } else {
+        throw new Error('Invalid response format');
+      }
+    } catch (err) {
+      console.error('Error loading models:', err);
+      // Fallback ai modelli hardcodati in caso di errore
+      setAvailableModels([
+        { name: 'chronos', display_name: 'Chronos Forecasting', description: 'Advanced time series forecasting' },
+        { name: 'moment', display_name: 'MOMENT Moving Average', description: 'Moving average based model' }
+      ]);
+    } finally {
+      setLoadingModels(false);
     }
   };
 
@@ -282,19 +318,32 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
                                 {/* Model Selector */}
                 <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
                   <label className="block text-sm font-bold text-gray-800">🤖 Modello IA</label>
-                  <Select value={selectedModel} onValueChange={setSelectedModel}>
-                    <SelectTrigger className="w-full border-2 border-gray-300 hover:border-blue-500">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent style={{ backgroundColor: '#eff0f2ff', color: '#1f2937' }}>
-                      <SelectItem value="chronos">Chronos (Basato su Tendenze)</SelectItem>
-                      <SelectItem value="moment">MOMENT (Media Mobile)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  {loadingModels ? (
+                    <div className="flex items-center gap-2 py-3 px-4 bg-white rounded border-2 border-gray-300">
+                      <Loader className="w-4 h-4 animate-spin text-blue-600" />
+                      <span className="text-gray-600 text-sm">Caricamento modelli...</span>
+                    </div>
+                  ) : availableModels.length === 0 ? (
+                    <div className="py-3 px-4 bg-white rounded border-2 border-gray-300 text-gray-500 text-sm">
+                      Nessun modello disponibile
+                    </div>
+                  ) : (
+                    <Select value={selectedModel} onValueChange={setSelectedModel}>
+                      <SelectTrigger className="w-full border-2 border-gray-300 hover:border-blue-500">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent style={{ backgroundColor: '#eff0f2ff', color: '#1f2937' }}>
+                        {availableModels.map((model) => (
+                          <SelectItem key={model.name} value={model.name}>
+                            {model.display_name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                   <p className="text-xs text-gray-500 mt-2">
-                    {selectedModel === 'chronos'
-                      ? '📈 Utilizza l\'analisi delle tendenze per prevedere le porzioni future'
-                      : '📊 Utilizza la media mobile dei dati storici'}
+                    {availableModels.find(m => m.name === selectedModel)?.description || 
+                     '📊 Seleziona un modello per le previsioni'}
                   </p>
                 </div>
 

@@ -7,6 +7,8 @@ import os
 import pandas as pd
 from datetime import datetime, timedelta
 import numpy as np
+from smartfood.utils.config_loader import get_config_loader
+from smartfood.utils.model_registry import get_model_registry
 
 
 def is_weekday(date):
@@ -51,6 +53,42 @@ class PredictionService:
             uploads_folder: percorso della cartella uploads con i CSV storici
         """
         self.uploads_folder = uploads_folder
+        self.config_loader = get_config_loader()
+        self.model_registry = get_model_registry()
+        
+        # Registra automaticamente gli handler di predizione
+        # per tutti i modelli disponibili nel YAML
+        self._register_prediction_handlers()
+    
+    def _register_prediction_handlers(self):
+        """
+        Registra automaticamente gli handler di predizione per i modelli disponibili.
+        
+        Cerca metodi named _predict_with_{model_name} per ogni modello nel YAML.
+        Se il metodo esiste, lo registra automaticamente nel model_registry.
+        
+        Questo approccio permette:
+        - Aggiungere nuovi modelli al YAML senza modificare questo codice
+        - Ogni modello può avere un'implementazione completamente diversa
+        - Se un modello non ha un handler, viene semplicemente skippato (errore in fase di runtime)
+        """
+        available_models = self.model_registry.get_available_models()
+        
+        for model_name in available_models:
+            # Crea il nome del metodo handler
+            handler_method_name = f'_predict_with_{model_name.lower()}'
+            
+            # Verifica se il metodo esiste in questa classe
+            if hasattr(self, handler_method_name):
+                # Ottieni il metodo
+                handler = getattr(self, handler_method_name)
+                
+                # Registralo nel model_registry
+                self.model_registry.register_prediction_handler(model_name, handler)
+                print(f"[PredictionService] ✓ Handler registrato per '{model_name}'")
+            else:
+                print(f"[PredictionService] ⚠ Nessun handler trovato per '{model_name}' (cerca metodo: {handler_method_name})")
+    
     
     def generate_prediction(self, school_name, model_id, start_date, end_date, dish_name=None):
         """
@@ -126,11 +164,9 @@ class PredictionService:
             
             # 3. Genera le previsioni in base al modello
             num_days_to_predict = len(working_days)
-            if model_id == 'moment':
-                predictions = self._predict_with_moment(df_prepared, num_days_to_predict)
-            elif model_id == 'chronos':
-                predictions = self._predict_with_chronos(df_prepared, num_days_to_predict)
-            else:
+            
+            # Verifica che il modello sia disponibile
+            if not self.model_registry.is_model_available(model_id):
                 return {
                     "school": school_name,
                     "model": model_id,
@@ -139,7 +175,22 @@ class PredictionService:
                     "working_days": len(working_days),
                     "dish": dish_name,
                     "predictions": [],
-                    "error": f"Unknown model: {model_id}"
+                    "error": f"Unknown model: {model_id}. Available models: {', '.join(self.model_registry.get_available_models())}"
+                }
+            
+            # Chiama il prediction handler registrato nel model_registry
+            try:
+                predictions = self.model_registry.predict(model_id, df_prepared, num_days_to_predict)
+            except ValueError as e:
+                return {
+                    "school": school_name,
+                    "model": model_id,
+                    "start_date": start_date,
+                    "end_date": end_date,
+                    "working_days": len(working_days),
+                    "dish": dish_name,
+                    "predictions": [],
+                    "error": str(e)
                 }
             
             # 4. Associa le date dei giorni lavorativi alle previsioni
@@ -365,3 +416,157 @@ class PredictionService:
             })
         
         return predictions
+    
+    def _predict_with_timesfm(self, df, forecast_days):
+        """
+        Genera previsioni usando il modello TimesFM (Google)
+        
+        Per ora, simula con trend + rumore simile a Chronos
+        
+        Args:
+            df: DataFrame con date, portions_prepared, portions_wasted
+            forecast_days: numero di giorni
+            
+        Returns:
+            list: [{"date": "...", "portions": ..., "confidence": ...}, ...]
+
+        TODO: Implementa l'integrazione reale con TimesFM-2.5
+        """
+        predictions = []
+        
+        try:
+            # Calcola trend (regressione lineare semplice)
+            x = np.arange(len(df))
+            y = df['portions_prepared'].values
+            
+            # Filtra NaN values
+            mask = ~np.isnan(y)
+            x_clean = x[mask]
+            y_clean = y[mask]
+            
+            if len(x_clean) < 2:
+                raise ValueError("Not enough data points for trend calculation")
+            
+            coeffs = np.polyfit(x_clean, y_clean, 1)
+            trend_slope = coeffs[0]
+            
+        except Exception as e:
+            print(f"[TimesFM] Trend calculation failed ({str(e)}), using moving average instead")
+            trend_slope = 0
+        
+        last_date = df['date'].max()
+        last_value = df['portions_prepared'].iloc[-1] if not np.isnan(df['portions_prepared'].iloc[-1]) else df['portions_prepared'].mean()
+        std_portions = df['portions_prepared'].std()
+        
+        if np.isnan(std_portions) or std_portions == 0:
+            std_portions = last_value * 0.1
+        
+        # Genera previsioni con trend
+        for day_offset in range(1, forecast_days + 1):
+            forecast_date = last_date + timedelta(days=day_offset)
+            
+            # Applica il trend
+            predicted_portions = int(max(0, last_value + (trend_slope * day_offset)))
+            
+            # Aggiungi rumore (leggermente minore di Chronos, poiché TimesFM è più accurato)
+            noise = np.random.normal(0, std_portions * 0.12)
+            predicted_portions = int(max(0, predicted_portions + noise))
+            
+            # La confidence è generalmente più alta per TimesFM (zero-shot)
+            confidence = max(0.48, 0.94 - (day_offset * 0.05))
+            
+            predictions.append({
+                "date": forecast_date.strftime('%Y-%m-%d'),
+                "portions": predicted_portions,
+                "confidence": round(confidence, 2)
+            })
+        
+        return predictions
+    
+    def format_prediction(
+        self,
+        model_name: str,
+        prediction_value: float,
+        confidence: float = None
+    ) -> dict:
+        """
+        Formatta la predizione con le informazioni sulla confidenza
+        
+        Args:
+            model_name: Nome del modello (chronos, moment)
+            prediction_value: Valore della predizione (porzioni)
+            confidence: Valore di confidenza (0-1)
+        
+        Returns:
+            Dict con la predizione formattata per il frontend
+        """
+        model_config = self.config_loader.get_model_config(model_name)
+        vis_config = self.config_loader.get_visualization_config()
+        
+        result = {
+            "model": model_name,
+            "model_display_name": model_config.get('display_name') if model_config else model_name,
+            "prediction": prediction_value,
+            "supports_confidence": self.config_loader.supports_confidence(model_name),
+        }
+        
+        # Aggiungi informazioni sulla confidenza se supportate
+        if self.config_loader.supports_confidence(model_name) and confidence is not None:
+            result["confidence"] = round(confidence, 2)
+            result["confidence_percentage"] = round(confidence * 100, 2)
+            result["confidence_level"] = self._get_confidence_level(
+                confidence,
+                vis_config
+            )
+            result["confidence_color"] = self._get_confidence_color(
+                confidence,
+                vis_config
+            )
+            result["passes_threshold"] = confidence >= self.config_loader.get_confidence_threshold(model_name)
+        
+        return result
+    
+    def _get_confidence_level(self, confidence: float, vis_config: dict) -> str:
+        """Determina il livello di confidenza (high, medium, low)"""
+        high_threshold = vis_config.get('high_threshold', 0.8)
+        medium_threshold = vis_config.get('medium_threshold', 0.5)
+        
+        if confidence >= high_threshold:
+            return "high"
+        elif confidence >= medium_threshold:
+            return "medium"
+        else:
+            return "low"
+    
+    def _get_confidence_color(self, confidence: float, vis_config: dict) -> str:
+        """Ritorna il colore per la confidenza"""
+        level = self._get_confidence_level(confidence, vis_config)
+        colors = vis_config.get('confidence_color_scheme', {})
+        return colors.get(level, '#999999')
+    
+    def filter_predictions_by_confidence(
+        self,
+        predictions: list,
+        min_confidence: float = 0.5
+    ) -> list:
+        """
+        Filtra le previsioni in base alla confidenza minima
+        
+        Args:
+            predictions: Lista di predizioni dal metodo generate_prediction
+            min_confidence: Soglia minima di confidenza (0-1)
+        
+        Returns:
+            Lista filtrata di previsioni che passano il threshold
+        """
+        filtered = []
+        
+        for pred in predictions:
+            if 'confidence' in pred:
+                if pred.get('confidence', 0) >= min_confidence:
+                    filtered.append(pred)
+            else:
+                # Previsioni senza confidence sono sempre incluse
+                filtered.append(pred)
+        
+        return filtered

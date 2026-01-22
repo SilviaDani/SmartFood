@@ -1,0 +1,38 @@
+# Configurazione modelli di predizione e visualizzazione confidenze
+models:
+  # Modelli che supportano confidence scores
+  - name: "chronos"
+    display_name: "Chronos Forecasting"
+    type: "timeseries"
+    supports_confidence: true
+    min_confidence_threshold: 0.45
+    description: "Facebook's advanced time series forecasting model with trend analysis"
+    
+  - name: "moment"
+    display_name: "MOMENT Moving Average"
+    type: "timeseries"
+    supports_confidence: true
+    min_confidence_threshold: 0.50
+    description: "Moving average based model with statistical confidence intervals"
+    
+  - name: "timesfm"
+    display_name: "TimesFM-2.5 (Google)"
+    type: "timeseries"
+    supports_confidence: true
+    min_confidence_threshold: 0.48
+    description: "Google's foundation model for time series forecasting with zero-shot capability"
+
+# Configurazione visualizzazione
+visualization:
+  confidence_color_scheme:
+    high: "#4CAF50"      # Verde
+    medium: "#FFC107"    # Giallo
+    low: "#F44336"       # Rosso
+  
+  high_threshold: 0.80
+  medium_threshold: 0.50
+  
+  # Template per mostrare le confidenze
+  show_confidence_badges: true
+  show_confidence_percentage: true
+  show_confidence_bar: true

@@ -4,6 +4,7 @@ Prediction Blueprint - Endpoints per le previsioni dei pasti
 
 from flask import Blueprint, request, jsonify
 from smartfood.services import PredictionService
+from smartfood.utils.model_registry import get_model_registry
 import os
 
 bp = Blueprint('prediction', __name__, url_prefix='/api')
@@ -12,6 +13,7 @@ bp = Blueprint('prediction', __name__, url_prefix='/api')
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'uploads')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 prediction_service = PredictionService(UPLOAD_FOLDER)
+model_registry = get_model_registry()
 
 
 @bp.route('/predict', methods=['POST'])
@@ -73,10 +75,12 @@ def predict():
                 'message': 'school parameter is required and cannot be empty'
             }), 400
         
-        if model not in ['moment', 'chronos']:
+        # Valida il modello in modo dinamico leggendo il registry
+        if not model_registry.is_model_available(model):
+            available = ', '.join(model_registry.get_available_models())
             return jsonify({
                 'success': False,
-                'message': f'model must be "moment" or "chronos", got "{model}"'
+                'message': f'model "{model}" is not available. Available models: {available}'
             }), 400
         
         if not start_date or not end_date:
@@ -210,6 +214,71 @@ def get_schools():
             'schools': sorted(list(schools))
         }), 200
     
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Server error: {str(e)}'
+        }), 500
+
+@bp.route('/models/available', methods=['GET'])
+def get_available_models():
+    """
+    GET /api/models/available
+    
+    Ritorna la lista di tutti i modelli disponibili per le predizioni
+    
+    Response:
+    {
+        "success": true,
+        "models": ["chronos", "moment", "timesfm"],
+        "count": 3
+    }
+    """
+    try:
+        models = model_registry.get_available_models()
+        return jsonify({
+            'success': True,
+            'models': models,
+            'count': len(models)
+        }), 200
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Server error: {str(e)}'
+        }), 500
+
+
+@bp.route('/models/detailed', methods=['GET'])
+def get_models_detailed():
+    """
+    GET /api/models/detailed
+    
+    Ritorna i modelli disponibili con dettagli (display_name, description, ecc.)
+    Utile per il frontend per mostrare info complete nel dropdown
+    
+    Response:
+    {
+        "success": true,
+        "models": [
+            {
+                "name": "chronos",
+                "display_name": "Chronos Forecasting",
+                "description": "Advanced time series forecasting...",
+                "type": "timeseries",
+                "supports_confidence": true
+            },
+            ...
+        ],
+        "count": 3
+    }
+    """
+    try:
+        all_models = model_registry.config_loader.get_all_models()
+        return jsonify({
+            'success': True,
+            'models': all_models,
+            'count': len(all_models)
+        }), 200
     except Exception as e:
         return jsonify({
             'success': False,

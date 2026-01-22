@@ -7,12 +7,14 @@ import uuid
 from datetime import datetime
 from threading import Thread
 import pandas as pd
+from smartfood.utils.model_registry import get_model_registry
 
 class TrainingService:
     """Service per gestire il training dei modelli"""
     
     def __init__(self, models_folder):
         self.models_folder = models_folder
+        self.model_registry = get_model_registry()
         self.jobs = {}  # Salva lo stato dei job (in produzione usa Redis)
         os.makedirs(models_folder, exist_ok=True)
     
@@ -73,12 +75,16 @@ class TrainingService:
             
             # 3. Addestra il modello
             job["progress"] = 60
-            if model_id == 'moment':
-                accuracy = self._train_moment_model(df)
-            elif model_id == 'chronos':
-                accuracy = self._train_chronos_model(df)
-            else:
-                raise ValueError(f"Unknown model: {model_id}")
+            
+            # Verifica che il modello sia disponibile
+            if not self.model_registry.is_model_available(model_id):
+                raise ValueError(
+                    f"Unknown model: {model_id}. "
+                    f"Available models: {', '.join(self.model_registry.get_available_models())}"
+                )
+            
+            # Chiama il training handler registrato
+            accuracy = self.model_registry.train(model_id, df)
             
             print(f"[Job {job_id}] Model training completed. Accuracy: {accuracy:.4f}")
             
