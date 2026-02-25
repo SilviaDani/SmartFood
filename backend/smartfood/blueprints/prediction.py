@@ -5,7 +5,18 @@ Prediction Blueprint - Endpoints per le previsioni dei pasti
 from flask import Blueprint, request, jsonify
 from smartfood.services import PredictionService
 from smartfood.utils.model_registry import get_model_registry
+from influxdb_client import InfluxDBClient
 import os
+
+def _get_influxdb_client(timeout_ms: int = 30_000):
+    """Crea un client InfluxDB usando le credenziali da environment variables"""
+    url = os.getenv('INFLUXDB_URL', 'http://localhost:8086')
+    token = os.getenv('INFLUXDB_TOKEN', '')
+    org = os.getenv('INFLUXDB_ORG', 'smart_food')
+    return InfluxDBClient(url=url, token=token, org=org, timeout=timeout_ms)
+
+INFLUXDB_BUCKET = os.getenv('INFLUXDB_BUCKET', 'smart_food_bucket_2023-2024-2025')
+INFLUXDB_ORG = os.getenv('INFLUXDB_ORG', 'smart_food')
 
 bp = Blueprint('prediction', __name__, url_prefix='/api')
 
@@ -116,6 +127,7 @@ def predict():
             'end_date': result['end_date'],
             'working_days': result['working_days'],
             'dish': result['dish'],
+            'zero_shot': result.get('zero_shot', False),
             'predictions': result['predictions']
         }), 200
     
@@ -129,46 +141,46 @@ def predict():
 @bp.route('/dishes/<school>', methods=['GET'])
 def get_dishes(school):
     """
-    Endpoint per ottenere la lista dei piatti disponibili per una scuola
+    Endpoint per ottenere la lista delle macrocategorie disponibili (globale, non filtrata per scuola)
     
     Response:
     {
         "success": bool,
         "school": str,
-        "dishes": ["piatto1", "piatto2", ...]
+        "dishes": ["macrocategoria1", "macrocategoria2", ...]
     }
     """
     try:
-        dishes = set()
-        
-        # Leggi tutti i CSV in uploads
-        if os.path.exists(UPLOAD_FOLDER):
-            for filename in os.listdir(UPLOAD_FOLDER):
-                if not filename.endswith('.csv'):
-                    continue
-                
-                filepath = os.path.join(UPLOAD_FOLDER, filename)
-                try:
-                    import pandas as pd
-                    df = pd.read_csv(filepath)
-                    
-                    # Filtra per scuola
-                    if 'school' in df.columns and 'dish_name' in df.columns:
-                        df_school = df[df['school'].str.lower() == school.lower()]
-                        
-                        if len(df_school) > 0:
-                            # Aggiungi i piatti unici di questa scuola
-                            dishes.update(df_school['dish_name'].dropna().unique())
-                except Exception as e:
-                    print(f"[get_dishes] Error reading {filename}: {str(e)}")
-                    continue
-        
+        client = _get_influxdb_client(timeout_ms=60_000)
+        query_api = client.query_api()
+
+        # schema.tagValues usa l'indice InfluxDB ed è molto più veloce di una full scan
+        query = f'''
+            import "influxdata/influxdb/schema"
+            schema.tagValues(
+              bucket: "{INFLUXDB_BUCKET}",
+              tag: "macrocategoria",
+              predicate: (r) => r._measurement == "school_food_waste",
+              start: -8y
+            )
+        '''
+
+        result = query_api.query(org=INFLUXDB_ORG, query=query)
+        client.close()
+
+        categories = sorted([
+            record.get_value()
+            for table in result
+            for record in table.records
+            if record.get_value()
+        ])
+
         return jsonify({
             'success': True,
             'school': school,
-            'dishes': sorted(list(dishes))
+            'dishes': categories
         }), 200
-    
+
     except Exception as e:
         return jsonify({
             'success': False,
@@ -179,41 +191,44 @@ def get_dishes(school):
 @bp.route('/schools', methods=['GET'])
 def get_schools():
     """
-    Endpoint per ottenere la lista delle scuole disponibili
-    (basato sui dati storici caricati)
+    Endpoint per ottenere la lista delle scuole disponibili da InfluxDB
     
     Response:
     {
         "success": bool,
-        "schools": ["Lincoln Elementary School", "Washington Middle School", ...]
+        "schools": ["SCUOLA A", "SCUOLA B", ...]
     }
     """
     try:
-        schools = set()
-        
-        # Leggi tutti i CSV in uploads
-        if os.path.exists(UPLOAD_FOLDER):
-            for filename in os.listdir(UPLOAD_FOLDER):
-                if not filename.endswith('.csv'):
-                    continue
-                
-                filepath = os.path.join(UPLOAD_FOLDER, filename)
-                try:
-                    import pandas as pd
-                    df = pd.read_csv(filepath)
-                    
-                    if 'school' in df.columns:
-                        # Aggiungi tutte le scuole uniche
-                        schools.update(df['school'].dropna().unique())
-                except Exception as e:
-                    print(f"[prediction.py] Error reading {filename}: {str(e)}")
-                    continue
-        
+        client = _get_influxdb_client(timeout_ms=60_000)
+        query_api = client.query_api()
+
+        # schema.tagValues usa l'indice InfluxDB ed è molto più veloce di una full scan
+        query = f'''
+            import "influxdata/influxdb/schema"
+            schema.tagValues(
+              bucket: "{INFLUXDB_BUCKET}",
+              tag: "scuola",
+              predicate: (r) => r._measurement == "school_food_waste",
+              start: -8y
+            )
+        '''
+
+        result = query_api.query(org=INFLUXDB_ORG, query=query)
+        client.close()
+
+        schools = sorted([
+            record.get_value()
+            for table in result
+            for record in table.records
+            if record.get_value()
+        ])
+
         return jsonify({
             'success': True,
-            'schools': sorted(list(schools))
+            'schools': schools
         }), 200
-    
+
     except Exception as e:
         return jsonify({
             'success': False,

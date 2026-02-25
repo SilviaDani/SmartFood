@@ -1,85 +1,94 @@
+# SmartFood
 
-# Smart Food – Reducing Food Waste in School Canteens
+Sistema di previsione delle porzioni per mense scolastiche, basato su modelli AI di time series forecasting (Chronos 2 di Amazon).
 
-## Overview
-**Smart Food** is a data-driven project aimed at reducing food waste in school canteens.  
-The system collects, stores, analyzes, and forecasts food consumption and waste data to help schools make better decisions about meal planning.
+---
 
-## Objectives
-- Reduce food waste in schools by predicting demand more accurately.
-- Provide insights into meal consumption patterns.
-- Enable schools to take timely action through dashboards and forecasts.
+## Requisiti
 
-## Key Features
-- **Data Collection and Storage**  
-  - School meal and waste data aggregated from multiple Excel files (2023–2025).
-  - Stored in **InfluxDB** for time-series management.
-- **Data Visualization**  
-  - **Grafana** dashboards to explore consumption and waste trends.
-- **Forecasting Models**  
-  - **Amazon Chronos** for time series forecasting (with fine-tuning).
-  - **Pypots** library (TimeMixer + SAITS) for forecasting and missing data imputation.
-- **Categorization**  
-  - Analysis by school, meal type, macro-category (e.g., pasta, fish, red meat).
-  - Configurable categories via a dedicated Excel mapping file.
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (include Docker Compose)
+- ~4 GB di RAM libera (il modello Chronos viene caricato in memoria al primo utilizzo)
+- I file Excel storici nella cartella `datas/` (struttura già presente nel repository)
 
-## Data Analysis
-Available types of analysis:
-- **Per School** – Waste trends specific to a school.
-- **Per Meal** – Waste linked to specific meal types (first course, side dish...).
-- **Per Macro-Category** – Aggregated by major food groups.
-- **Global** – All schools combined.
+---
 
-### Handling Missing Data
-- Missing values are managed with **NaN imputation** in PyPots forecasting.
+## Installazione e avvio
 
-## Tools and Technologies
-- **InfluxDB** – Time-series data storage
-- **Grafana** – Dashboards & visualizations
-- **Amazon Chronos** – Forecasting (fine-tuned)
-- **Pypots** – Forecasting & imputation (TimeMixer, SAITS)
-
-## Docker
-To build the image:
-- docker-compose build
-- docker-compose up -d
-
-To delete the image and rebuild it from scratch:
-docker-compose down
-docker system prune -a -f
-docker-compose up -d --build
-
-Turn Docker off:
-- docker-compose down
-
-## Distroless Docker
-
-  # Backend
-  docker build -f backend/Dockerfile -t smartfood-backend:distroless .
-
-  # Frontend
-  docker build -f frontend/Dockerfile -t smartfood-frontend:distroless .
-
-  # Confronta le dimensioni
-  docker images | grep smartfood
-
-  # Dopo che le immagini Distroless sono state costruite
-  docker-compose up -d
-
-## CSV Upload Feature
-
-The application now supports bulk CSV data import. See [CSV_UPLOAD_GUIDE.md](./CSV_UPLOAD_GUIDE.md) for:
-- Expected CSV format
-- How to upload files from the frontend
-- Backend validation and storage
-- Integration with InfluxDB
-
-Quick start:
 ```bash
-# 1. Use the example file
-python test_csv_upload.py example_data.csv
-
-# 2. Or upload through the UI: Data Entry → Bulk Upload CSV Data
+docker-compose up -d --build
 ```
 
+Questo comando costruisce e avvia tutti i servizi:
 
+| Servizio        | Porta  | Descrizione                              |
+|-----------------|--------|------------------------------------------|
+| Frontend        | `3000` | Interfaccia utente React/Vite            |
+| Backend API     | `8000` | API Flask + modelli AI                   |
+| InfluxDB        | `8086` | Database time series                     |
+| Redis           | `6379` | Broker per i task asincroni (Celery)     |
+| Celery Worker   | —      | Worker per il training in background     |
+
+Apri il browser su **http://localhost:3000**.
+
+---
+
+## Prima esecuzione
+
+Al primo avvio, la schermata di previsioni mostra:
+
+> *"Importazione dati storici in corso... La prima volta può richiedere alcuni minuti"*
+
+Il sistema sta importando automaticamente i file Excel dalla cartella `datas/` (ultimi 2 anni) in InfluxDB. Attendere il completamento prima di procedere.
+
+---
+
+## Utilizzo
+
+1. Vai alla sezione **Previsioni**
+2. Seleziona una **scuola** dall'elenco
+3. Scegli un **tipo di piatto** (opzionale — lascia vuoto per tutti i piatti combinati)
+4. Seleziona il **modello AI** (attualmente disponibile: Chronos)
+5. Imposta il **periodo di previsione** tramite il calendario
+6. Clicca **Genera Previsioni**
+
+> Se per la scuola o il piatto selezionato non esistono dati storici, il modello opera in modalità **zero-shot**: genera una stima basata sulla stagionalità media delle mense scolastiche italiane. Il risultato è indicato da un banner giallo.
+
+---
+
+## Comandi utili
+
+```bash
+# Avviare (senza rebuild)
+docker-compose up -d
+
+# Fermare tutti i servizi
+docker-compose down
+
+# Ricostruire dopo modifiche al codice
+docker-compose up -d --build
+
+# Vedere i log del backend in tempo reale
+docker-compose logs -f backend
+
+# Reimportare tutti i dati da zero (cancella il DB e reimporta)
+curl -X POST http://localhost:8000/api/data/reset
+```
+
+---
+
+## Struttura del progetto
+
+```
+SmartFood/
+├── backend/                # API Flask + modelli AI
+│   ├── smartfood/
+│   │   ├── blueprints/     # Endpoint REST
+│   │   ├── services/       # Logica previsioni e training
+│   │   └── utils/          # Configurazione modelli
+│   ├── config/
+│   │   └── models_confidence.yml   # Modelli abilitati
+│   └── requirements.txt
+├── frontend/               # Interfaccia React/Vite
+├── datas/                  # File Excel storici (non modificare)
+└── docker-compose.yml
+```

@@ -8,7 +8,7 @@ from flask import Flask
 from flask_cors import CORS
 from smartfood.models import db
 from smartfood.celery_app import celery_app
-from smartfood.blueprints import csv_upload, prediction, training_task_Celery as training_task, config
+from smartfood.blueprints import csv_upload, prediction, training_task_Celery as training_task, config, data_init
 
 
 def create_app():
@@ -34,6 +34,7 @@ def create_app():
     app.register_blueprint(training_task.bp)
     app.register_blueprint(prediction.bp)
     app.register_blueprint(config.config_bp)
+    app.register_blueprint(data_init.bp)
     
     # Health check endpoint
     @app.route('/health', methods=['GET'])

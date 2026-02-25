@@ -1,4 +1,15 @@
 
+  ## Problems encountered
+  
+   # MOMENT
+   Not usable at the moment. It requires transformers==4.33.3, but Chronos2 needs transformers>=4.41 and the two pakages are incompatible with each other. For now the MOMENT import is inside a try/except ImportError that raise a ValueError with this message: "MOMENT è disabilitato, usa Chronos o TimesFM".
+
+   # TimesFM
+   Similar problem that MOMENT have. TimesFM need PyPI that uses JAX as backend wich is incompatible with PyTorch.
+
+   A possible solution for this is to use a different docker container for each model.
+
+
   # Modern School Menu Page
 
   This is a code bundle for Modern School Menu Page. The original project is available at https://www.figma.com/design/OXv2XT6CG9U2w3rmsc4eBO/Modern-School-Menu-Page.

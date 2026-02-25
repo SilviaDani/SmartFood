@@ -6,21 +6,17 @@ models:
     type: "timeseries"
     supports_confidence: true
     min_confidence_threshold: 0.45
-    description: "Facebook's advanced time series forecasting model with trend analysis"
-    
-  - name: "moment"
-    display_name: "MOMENT Moving Average"
-    type: "timeseries"
-    supports_confidence: true
-    min_confidence_threshold: 0.50
-    description: "Moving average based model with statistical confidence intervals"
-    
-  - name: "timesfm"
-    display_name: "TimesFM-2.5 (Google)"
-    type: "timeseries"
-    supports_confidence: true
-    min_confidence_threshold: 0.48
-    description: "Google's foundation model for time series forecasting with zero-shot capability"
+    description: "Amazon's foundation model for time series forecasting with zero-shot capability"
+
+  # MOMENT disabilitato: richiede transformers==4.33.3, incompatibile con chronos-forecasting (>=4.41)
+  # - name: "moment"
+  #   display_name: "MOMENT Moving Average"
+  #   ...
+
+  # TimesFM disabilitato: il pacchetto PyPI usa JAX, incompatibile con l'ambiente PyTorch corrente
+  # - name: "timesfm"
+  #   display_name: "TimesFM-2.5 (Google)"
+  #   ...
 
 # Configurazione visualizzazione
 visualization:

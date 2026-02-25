@@ -26,6 +26,7 @@ interface PredictionResponse {
   model: string;
   forecast_days: number;
   predictions: Prediction[];
+  zero_shot?: boolean;
   message?: string;
 }
 
@@ -44,18 +45,63 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
   const [loadingModels, setLoadingModels] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingSchools, setLoadingSchools] = useState(true);
+  const [initializingData, setInitializingData] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   // State per i risultati
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [generatedAt, setGeneratedAt] = useState<string | null>(null);
   const [responseData, setResponseData] = useState<PredictionResponse | null>(null);
+  const [zeroShot, setZeroShot] = useState<boolean>(false);
 
   // Carica la lista delle scuole all'avvio
   useEffect(() => {
-    loadSchools();
+    initializeData();
     loadModels();
   }, []);
+
+  const initializeData = async () => {
+    try {
+      setLoadingSchools(true);
+      setInitializingData(true);
+      setError(null);
+
+      // Importa i dati storici in InfluxDB se non ancora presenti
+      // Timeout lungo (10 min) perché l'import di molti file Excel può richiedere tempo
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 600_000);
+
+      const response = await fetch(`${API_BASE_URL}/api/data/initialize`, {
+        method: 'POST',
+        signal: controller.signal,
+      });
+      clearTimeout(timeout);
+
+      if (!response.ok) {
+        throw new Error('Impossibile inizializzare i dati');
+      }
+
+      const data = await response.json();
+
+      if (!data.success && !data.already_initialized) {
+        throw new Error(data.message || 'Errore durante l\'inizializzazione');
+      }
+
+      // Se i dati sono stati appena importati (prima volta), aspetta che InfluxDB
+      // indicizzi i tag prima di interrogarlo con schema.tagValues()
+      if (!data.already_initialized && data.imported?.length > 0) {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      }
+
+    } catch (err) {
+      // Errore non bloccante: prova comunque a caricare le scuole
+      console.warn('Inizializzazione dati fallita:', err);
+    } finally {
+      setInitializingData(false);
+      // In ogni caso carica le scuole (potrebbero già esserci dati)
+      loadSchools();
+    }
+  };
 
   // Carica i piatti quando cambia la scuola selezionata
   useEffect(() => {
@@ -201,6 +247,7 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
 
       setPredictions(data.predictions);
       setResponseData(data);
+      setZeroShot(data.zero_shot ?? false);
       setGeneratedAt(new Date().toLocaleString());
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : 'Failed to generate predictions';
@@ -254,7 +301,13 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
             <p className="text-sm text-gray-600 mt-1">Configura i parametri di previsione</p>
           </CardHeader>
           <CardContent className="space-y-6 pt-8">
-            {loadingSchools ? (
+            {initializingData ? (
+              <div className="flex flex-col items-center justify-center py-12 gap-3">
+                <Loader className="w-6 h-6 animate-spin text-blue-600" />
+                <span className="text-gray-700 font-medium">Importazione dati storici in corso...</span>
+                <span className="text-sm text-gray-500">La prima volta può richiedere alcuni minuti</span>
+              </div>
+            ) : loadingSchools ? (
               <div className="flex items-center justify-center py-12">
                 <Loader className="w-6 h-6 animate-spin text-blue-600 mr-2" />
                 <span className="text-gray-600">Caricamento scuole...</span>
@@ -262,7 +315,7 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
             ) : schools.length === 0 ? (
               <div className="text-center py-8 bg-yellow-50 rounded-lg border border-yellow-200">
                 <p className="text-yellow-800 font-semibold">Nessuna Scuola Disponibile</p>
-                <p className="text-sm text-yellow-700 mt-1">Carica i dati CSV per iniziare</p>
+                <p className="text-sm text-yellow-700 mt-1">Nessun dato trovato nel database</p>
               </div>
             ) : (
               <>
@@ -441,6 +494,22 @@ export function PredictionsPage({ onBack }: PredictionsPageProps) {
         {/* Results */}
         {predictions.length > 0 && (
           <div className="space-y-6">
+            {/* Zero-Shot Warning Banner */}
+            {zeroShot && (
+              <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 flex items-start gap-3">
+                <span className="text-2xl mt-0.5">⚡</span>
+                <div>
+                  <p className="font-semibold text-amber-900">Previsione Zero-Shot</p>
+                  <p className="text-sm text-amber-800 mt-1">
+                    Nessun dato storico trovato per questa scuola{selectedDish ? ` e il piatto "${selectedDish}"` : ''}.
+                    Il modello ha usato un contesto sintetico basato sulla stagionalità media delle mense scolastiche italiane.
+                    Le previsioni sono indicative: <strong>Chronos</strong> e <strong>TimesFM</strong> sono modelli a priori affidabili,
+                    mentre <strong>MOMENT</strong> richiede dati storici per risultati significativi.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Summary */}
             <Card>
               <CardHeader>

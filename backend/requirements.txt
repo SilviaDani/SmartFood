@@ -1,22 +1,30 @@
 accelerate>=0.26.0
-chronos-forecasting
-influxdb-client
-matplotlib
+chronos-forecasting>=2.0
+influxdb-client==1.48.0
+matplotlib>=3.7.0
 mockseries #to generate timeseries
-openpyxl
+openpyxl==3.1.5
 pandas>=2.0.3
 PyYAML>=6.0
 # python=3.11
 
 #prometheus_client
-torch
-torchaudio
-torchvision
+torch==2.5.1
+#torchaudio
+#torchvision
 
-transformers
+transformers==4.47.1
 
 #------------
-pypots
+#pypots
+# momentfm commentato: richiede transformers==4.33.3, incompatibile con chronos-forecasting>=2.0 (richiede transformers>=4.41)
+# Per usare MOMENT, servirà installarlo in un ambiente separato o attendere un aggiornamento del pacchetto
+#momentfm==0.1.4
+
+# timesfm commentato: il pacchetto PyPI usa JAX come backend, incompatibile con torch
+# Decommentare solo quando si integra davvero TimesFM
+#timesfm
+
 #To make grafana run in background
 #nohup ./bin/grafana-server > grafana.log 2>&1 &
 #TO KILL: ps -ef | grep grafana

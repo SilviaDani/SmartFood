@@ -23,6 +23,7 @@ services:
     volumes:
       - ./backend/smartfood/uploads:/app/uploads
       - ./backend/smartfood/trained_models:/app/trained_models
+      - ./datas:/app/datas:ro
     ports:
       - "8000:8000"
     environment:
